@@ -94,6 +94,19 @@ def meta() -> dict:
         "fingpt_tasks": ["sentiment", "headline", "relations", "entities", "qa", "forecast", "report"],
         "ai_hedge_fund_personas": sorted(PERSONAS),
         "vendors": vendor_status(),
+        "notes": {
+            "personas": (
+                "ai-hedge-fund personas are stock-fundamental prompts applied to FX. "
+                "They answer in character and may honestly decline (e.g. Buffett treats "
+                "currency pairs as outside his circle of competence). Supply macro/news "
+                "evidence and treat outputs as character-flavored second opinions, "
+                "not FX signals."
+            ),
+            "tradingagents_run": (
+                "Runs the full upstream multi-agent graph with real yfinance FX data "
+                "(USDJPY=X style tickers). Expect minutes of latency per call, not seconds."
+            ),
+        },
     }
 
 
