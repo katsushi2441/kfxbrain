@@ -1,0 +1,9 @@
+[submodule "vendor/TradingAgents"]
+	path = vendor/TradingAgents
+	url = https://github.com/TauricResearch/TradingAgents.git
+[submodule "vendor/FinGPT"]
+	path = vendor/FinGPT
+	url = https://github.com/AI4Finance-Foundation/FinGPT.git
+[submodule "vendor/ai-hedge-fund"]
+	path = vendor/ai-hedge-fund
+	url = https://github.com/virattt/ai-hedge-fund.git

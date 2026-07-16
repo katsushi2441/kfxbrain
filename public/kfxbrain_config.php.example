@@ -1,0 +1,3 @@
+<?php
+define('KFXBRAIN_API_BASE', getenv('KFXBRAIN_API_BASE') ?: 'http://exbridge.ddns.net:18326');
+define('KFXBRAIN_API_TOKEN', getenv('KFXBRAIN_API_TOKEN') ?: '');
