@@ -54,7 +54,8 @@ def vendor_status() -> dict[str, Any]:
         "finmem": "FinMem",
     }
     return {
-        key: {**UPSTREAM[key], "installed": (VENDOR_ROOT / folder / ".git").is_dir()}
+        # submoduleは.gitがファイル、単独cloneはディレクトリなのでexists()で判定
+        key: {**UPSTREAM[key], "installed": (VENDOR_ROOT / folder / ".git").exists()}
         for key, folder in folders.items()
     }
 
