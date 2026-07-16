@@ -13,5 +13,15 @@
     "repository": "https://github.com/virattt/ai-hedge-fund.git",
     "commit": "09dd33167bd6b4ea63ae32e7246e70e80632cc81",
     "license": "MIT"
+  },
+  "FinRobot": {
+    "repository": "https://github.com/AI4Finance-Foundation/FinRobot.git",
+    "commit": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+    "license": "Apache-2.0"
+  },
+  "FinMem": {
+    "repository": "https://github.com/pipiku915/FinMem-LLM-StockTrading.git",
+    "commit": "be814aa47970de9bf2fdd6a1d5a60ae5cf361b46",
+    "license": "MIT"
   }
 }

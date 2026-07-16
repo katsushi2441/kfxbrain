@@ -32,6 +32,16 @@ UPSTREAM = {
         "commit": "09dd33167bd6b4ea63ae32e7246e70e80632cc81",
         "license": "MIT",
     },
+    "finrobot": {
+        "name": "AI4Finance-Foundation/FinRobot",
+        "commit": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+        "license": "Apache-2.0",
+    },
+    "finmem": {
+        "name": "pipiku915/FinMem-LLM-StockTrading",
+        "commit": "be814aa47970de9bf2fdd6a1d5a60ae5cf361b46",
+        "license": "MIT",
+    },
 }
 
 
@@ -40,6 +50,8 @@ def vendor_status() -> dict[str, Any]:
         "tradingagents": "TradingAgents",
         "fingpt": "FinGPT",
         "ai-hedge-fund": "ai-hedge-fund",
+        "finrobot": "FinRobot",
+        "finmem": "FinMem",
     }
     return {
         key: {**UPSTREAM[key], "installed": (VENDOR_ROOT / folder / ".git").is_dir()}
@@ -314,5 +326,189 @@ class FinGptAdapter:
             "vendor": UPSTREAM["fingpt"],
             "feature": feature,
             "source": source,
+            "output": output,
+        }
+
+
+# FinRobotのAnnual Report Analyzer: 分析指示(dedent文字列)が
+# finrobot/functional/analyzer.py の各analyze_*関数内にある。上流moduleの
+# importはyfinance/SEC依存を引き込むため、固定コミットのソースからASTで
+# 指示テキストだけを抽出して使う(コピーせず、実行時にvendorから読む)。
+FINROBOT_SECTIONS = {
+    "income_stmt": "analyze_income_stmt",
+    "balance_sheet": "analyze_balance_sheet",
+    "cash_flow": "analyze_cash_flow",
+    "segment_stmt": "analyze_segment_stmt",
+    "risk_assessment": "get_risk_assessment",
+    "competitors": "get_competitors_analysis",
+    "business_highlights": "analyze_business_highlights",
+    "company_description": "analyze_company_description",
+}
+
+
+class FinRobotAdapter:
+    """FinRobot(AI4Finance)のアナリスト指示とMarket Forecasterワークフローを実行する。"""
+
+    def __init__(self, brain: FxBrain) -> None:
+        self.brain = brain
+        self._instructions: dict[str, str] | None = None
+
+    def _load_instructions(self) -> dict[str, str]:
+        if self._instructions is not None:
+            return self._instructions
+        import ast
+
+        path = VENDOR_ROOT / "FinRobot" / "finrobot" / "functional" / "analyzer.py"
+        if not path.is_file():
+            raise BrainError("FinRobot vendor is not installed")
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        found: dict[str, str] = {}
+        wanted = {v: k for k, v in FINROBOT_SECTIONS.items()}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name in wanted:
+                for sub in ast.walk(node):
+                    # instruction = dedent("""...""") の文字列定数を拾う
+                    if (isinstance(sub, ast.Assign) and sub.targets
+                            and isinstance(sub.targets[0], ast.Name)
+                            and sub.targets[0].id == "instruction"):
+                        call = sub.value
+                        if isinstance(call, ast.Call) and call.args and isinstance(call.args[0], ast.Constant):
+                            found[wanted[node.name]] = str(call.args[0].value).strip()
+                        elif isinstance(call, ast.Constant):
+                            found[wanted[node.name]] = str(call.value).strip()
+        missing = set(FINROBOT_SECTIONS) - set(found)
+        if missing:
+            raise BrainError(f"FinRobot instructions not found for: {sorted(missing)}")
+        self._instructions = found
+        return found
+
+    def report_section(self, section: str, request: FxBrainRequest) -> dict[str, Any]:
+        if section not in FINROBOT_SECTIONS:
+            raise BrainError(f"unknown FinRobot section: {section}")
+        instruction = self._load_instructions()[section]
+        # 上流のcombine_prompt(instruction, resource, table)と同じ結合順
+        prompt = (
+            f"{request.compact_json()}\n\n"
+            f"Resource: the JSON evidence above supplied by the caller\n\n"
+            f"Instruction: {instruction}\n"
+            "Use only the supplied evidence; state what is missing instead of inventing. Return JSON only. "
+            'Schema: {"analysis":"...","key_points":["..."],"missing_data":["..."]}'
+        )
+        output = self.brain.generate_json(prompt)
+        return {
+            "vendor": UPSTREAM["finrobot"],
+            "function": f"finrobot.functional.analyzer.ReportAnalysisUtils.{FINROBOT_SECTIONS[section]}",
+            "section": section,
+            "output": output,
+        }
+
+    def forecast(self, request: FxBrainRequest) -> dict[str, Any]:
+        # FinRobotのMarket Forecasterエージェント(agent_fingpt_forecaster)のタスク契約:
+        # ポジティブ材料と懸念を2-4個ずつ、翌週の値動きを%レンジで予測し、根拠を要約する。
+        prompt = (
+            "You are executing the FinRobot Market Forecaster workflow. "
+            f"Analyze the positive developments and potential concerns of {request.pair} "
+            "with 2-4 most important factors respectively and keep them concise. "
+            "Most factors should be inferred from the supplied news and market data. "
+            "Then make a rough prediction (e.g. up/down by 2-3%) of the price movement for next week, "
+            "and provide a summary analysis to support your prediction. "
+            "Use only the supplied evidence. Return JSON only. Schema: "
+            '{"positive_developments":["..."],"potential_concerns":["..."],'
+            '"prediction":"up|down x-y%","confidence":0,"summary":"..."}\n'
+            f"Evidence: {request.compact_json()}"
+        )
+        output = self.brain.generate_json(prompt)
+        return {
+            "vendor": UPSTREAM["finrobot"],
+            "function": "finrobot agents workflow: Market_Forecaster (agent_fingpt_forecaster)",
+            "output": output,
+        }
+
+
+class FinMemAdapter:
+    """FinMem(階層メモリ+性格設計のLLMトレーダー)。上流puppy/prompts.pyの
+    プロンプト実体を直接importして使う(依存ゼロの純文字列モジュール)。
+    メモリDBは持たず、呼び出し側がprior_reportsで各層の記憶を渡すステートレス設計。"""
+
+    def __init__(self, brain: FxBrain) -> None:
+        self.brain = brain
+        self._prompts = None
+
+    def _load_prompts(self):
+        if self._prompts is None:
+            path = VENDOR_ROOT / "FinMem" / "puppy" / "prompts.py"
+            if not path.is_file():
+                raise BrainError("FinMem vendor is not installed")
+            # puppy/__init__.pyはfaiss等の重依存を引くため、prompts.py(依存ゼロの
+            # 純文字列モジュール)だけをファイルから直接ロードする
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("finmem_prompts", path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            self._prompts = module
+        return self._prompts
+
+    @staticmethod
+    def _memory_block(request: FxBrainRequest) -> str:
+        layers = request.prior_reports or {}
+        lines = []
+        for layer in ("short", "mid", "long", "reflection"):
+            items = layers.get(layer) or []
+            if isinstance(items, str):
+                items = [items]
+            for i, item in enumerate(items):
+                lines.append(f"[{layer}-term memory id {i}] {item}")
+        if request.news:
+            for i, item in enumerate(request.news):
+                lines.append(f"[short-term memory id news-{i}] {item}")
+        return "\n".join(lines) if lines else "(no memories supplied)"
+
+    def decide(self, request: FxBrainRequest) -> dict[str, Any]:
+        p = self._load_prompts()
+        cum_return = float((request.position or {}).get("cumulative_return", 0) or 0)
+        character = "risk-seeking" if cum_return >= 0 else "risk-averse"
+        investment_info = (
+            p.test_investment_info_prefix.format(symbol=request.pair, cur_date=request.as_of or "today")
+            + "\n" + p.test_sentiment_explanation
+            + "\n" + p.test_momentum_explanation
+            + "\nMemories:\n" + self._memory_block(request)
+            + f"\nPosition context: {json.dumps(request.position or {}, ensure_ascii=False)}"
+            + f"\nTechnicals: {json.dumps(request.technicals or {}, ensure_ascii=False)}"
+        )
+        # 上流test_promptの契約(gradio用のJSON suffixは自前スキーマに差替え)
+        base = p.test_prompt.split("${gr.complete_json_suffix_v2}")[0]
+        prompt = (
+            base.replace("${investment_info}", investment_info)
+            + f"\nYour character right now is {character} (cumulative return {cum_return}).\n"
+            "Return JSON only. Schema: "
+            '{"investment_decision":"buy|sell|hold","summary_reason":"...",'
+            '"supporting_memory_ids":["..."],"confidence":0}'
+        )
+        output = self.brain.generate_json(prompt)
+        return {
+            "vendor": UPSTREAM["finmem"],
+            "function": "puppy.prompts.test_prompt (layered-memory decision, character switching)",
+            "character": character,
+            "output": output,
+        }
+
+    def reflect(self, request: FxBrainRequest) -> dict[str, Any]:
+        p = self._load_prompts()
+        investment_info = (
+            f"The ticker analyzed is {request.pair}, current date {request.as_of or 'today'}.\n"
+            f"Observed outcome: {json.dumps(request.position or {}, ensure_ascii=False)}\n"
+            "Memories:\n" + self._memory_block(request)
+        )
+        base = p.train_prompt.split("${gr.complete_json_suffix_v2}")[0]
+        prompt = (
+            base.replace("${investment_info}", investment_info)
+            + "\nReturn JSON only. Schema: "
+            '{"summary_reason":"...","supporting_memory_ids":["..."],'
+            '"lesson_for_future":"..."}'
+        )
+        output = self.brain.generate_json(prompt)
+        return {
+            "vendor": UPSTREAM["finmem"],
+            "function": "puppy.prompts.train_prompt (reflection loop)",
             "output": output,
         }

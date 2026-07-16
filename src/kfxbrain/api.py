@@ -13,9 +13,12 @@ from .config import settings
 from .ollama import BrainError, FxBrain
 from .schemas import BrainResponse, FxBrainRequest, TradingAgentsRequest
 from .vendor_adapters import (
+    FINROBOT_SECTIONS,
     PERSONAS,
     AiHedgeFundAdapter,
     FinGptAdapter,
+    FinMemAdapter,
+    FinRobotAdapter,
     TradingAgentsAdapter,
     vendor_status,
 )
@@ -31,6 +34,8 @@ brain = FxBrain(settings)
 tradingagents = TradingAgentsAdapter(brain, settings)
 ai_hedge_fund = AiHedgeFundAdapter(brain)
 fingpt = FinGptAdapter(brain)
+finrobot = FinRobotAdapter(brain)
+finmem = FinMemAdapter(brain)
 
 
 @app.middleware("http")
@@ -90,8 +95,13 @@ def meta() -> dict:
             "/v1/vendor/ai-hedge-fund/persona/{persona}",
             "/v1/vendor/ai-hedge-fund/news-sentiment",
             "/v1/vendor/ai-hedge-fund/portfolio",
+            "/v1/vendor/finrobot/forecast",
+            "/v1/vendor/finrobot/report/{section}",
+            "/v1/vendor/finmem/decide",
+            "/v1/vendor/finmem/reflect",
         ],
         "fingpt_tasks": ["sentiment", "headline", "relations", "entities", "qa", "forecast", "report"],
+        "finrobot_sections": sorted(FINROBOT_SECTIONS),
         "ai_hedge_fund_personas": sorted(PERSONAS),
         "vendors": vendor_status(),
         "notes": {
@@ -237,3 +247,42 @@ def ai_hedge_fund_portfolio(payload: FxBrainRequest):
         "vendor/ai-hedge-fund/portfolio",
         lambda: ai_hedge_fund.portfolio(payload),
     )
+
+
+@app.post(
+    "/v1/vendor/finrobot/forecast",
+    response_model=BrainResponse,
+    dependencies=[Depends(require_token)],
+)
+def finrobot_forecast(payload: FxBrainRequest):
+    return run_vendor("vendor/finrobot/forecast", lambda: finrobot.forecast(payload))
+
+
+@app.post(
+    "/v1/vendor/finrobot/report/{section}",
+    response_model=BrainResponse,
+    dependencies=[Depends(require_token)],
+)
+def finrobot_report(section: str, payload: FxBrainRequest):
+    return run_vendor(
+        f"vendor/finrobot/report/{section}",
+        lambda: finrobot.report_section(section, payload),
+    )
+
+
+@app.post(
+    "/v1/vendor/finmem/decide",
+    response_model=BrainResponse,
+    dependencies=[Depends(require_token)],
+)
+def finmem_decide(payload: FxBrainRequest):
+    return run_vendor("vendor/finmem/decide", lambda: finmem.decide(payload))
+
+
+@app.post(
+    "/v1/vendor/finmem/reflect",
+    response_model=BrainResponse,
+    dependencies=[Depends(require_token)],
+)
+def finmem_reflect(payload: FxBrainRequest):
+    return run_vendor("vendor/finmem/reflect", lambda: finmem.reflect(payload))

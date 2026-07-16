@@ -7,3 +7,9 @@
 [submodule "vendor/ai-hedge-fund"]
 	path = vendor/ai-hedge-fund
 	url = https://github.com/virattt/ai-hedge-fund.git
+[submodule "vendor/FinRobot"]
+	path = vendor/FinRobot
+	url = https://github.com/AI4Finance-Foundation/FinRobot.git
+[submodule "vendor/FinMem"]
+	path = vendor/FinMem
+	url = https://github.com/pipiku915/FinMem-LLM-StockTrading.git
