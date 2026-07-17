@@ -109,6 +109,7 @@ class TradingAgentsRequest(BaseModel):
     trade_date: str = Field(default="", max_length=10)
     debate_rounds: int = Field(default=1, ge=1, le=3)
     risk_rounds: int = Field(default=1, ge=1, le=3)
+    analysts: list[str] = Field(default_factory=lambda: ["market"], max_length=4)
     output_language: str = Field(default="Japanese", max_length=40)
 
     @field_validator("pair")

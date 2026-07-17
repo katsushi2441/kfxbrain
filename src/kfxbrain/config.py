@@ -12,6 +12,7 @@ class Settings:
     allowed_client_ips: frozenset[str]
     ollama_url: str
     ollama_model: str
+    fast_ollama_model: str
     ollama_timeout: int
     max_input_chars: int
 
@@ -29,6 +30,7 @@ def load_settings() -> Settings:
         allowed_client_ips=frozenset(allowed),
         ollama_url=os.getenv("KFXBRAIN_OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/"),
         ollama_model=os.getenv("KFXBRAIN_OLLAMA_MODEL", "gemma4:12b-it-qat").strip(),
+        fast_ollama_model=os.getenv("KFXBRAIN_FAST_OLLAMA_MODEL", "gemma4:e4b").strip(),
         ollama_timeout=int(os.getenv("KFXBRAIN_OLLAMA_TIMEOUT", "300")),
         max_input_chars=int(os.getenv("KFXBRAIN_MAX_INPUT_CHARS", "50000")),
     )

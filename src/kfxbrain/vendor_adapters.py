@@ -90,16 +90,38 @@ class TradingAgentsAdapter:
             try:
                 from tradingagents.default_config import DEFAULT_CONFIG
                 from tradingagents.graph.trading_graph import TradingAgentsGraph
+                from tradingagents.llm_clients import openai_client as _oc
             except Exception as exc:
                 raise BrainError(f"TradingAgents import failed: {exc}") from exc
 
+            # 上流はmax_tokensをLLMへ渡さない(_PASSTHROUGH_KWARGSに無い・_get_provider_kwargsも
+            # 温度とretryだけ転送)。そのため各レポートが無制限に長文化し5.5分かかる。vendorは
+            # 編集せず、実行時にmax_tokens転送を有効化して出力長を抑え、180秒プロキシ上限に収める。
+            if "max_tokens" not in _oc._PASSTHROUGH_KWARGS:
+                _oc._PASSTHROUGH_KWARGS = _oc._PASSTHROUGH_KWARGS + ("max_tokens",)
+            _orig_kwargs = TradingAgentsGraph._get_provider_kwargs
+            if getattr(_orig_kwargs, "_kfxbrain_maxtok", False) is False:
+                def _kwargs_with_max_tokens(self):
+                    kw = _orig_kwargs(self)
+                    mt = self.config.get("max_tokens")
+                    if mt not in (None, "", 0):
+                        kw["max_tokens"] = int(mt)
+                    return kw
+                _kwargs_with_max_tokens._kfxbrain_maxtok = True
+                TradingAgentsGraph._get_provider_kwargs = _kwargs_with_max_tokens
+
             config = deepcopy(DEFAULT_CONFIG)
             work = Path(__file__).resolve().parents[2] / "data" / "tradingagents"
+            # リバースプロキシの読み取り上限(180秒)に収めるための高速プロファイル
+            # (PayApi/Chet 2026-07-18指摘)。5.5分の主因は長文レポート×多数の逐次LLM。
+            # 対策: quick-thinkを高速モデル(e4b)に、reasoning系の deep-think だけ12bを維持、
+            # 分析役を市場のみ(fast_analysts)に絞り、討論/リスクは各1ラウンド。
+            # 深い判断が要る場合は debate_rounds/risk_rounds を上げて呼び出し側で許容する。
             config.update(
                 {
                     "llm_provider": "ollama",
-                    "deep_think_llm": self.settings.ollama_model,
-                    "quick_think_llm": self.settings.ollama_model,
+                    "deep_think_llm": self.settings.fast_ollama_model,
+                    "quick_think_llm": self.settings.fast_ollama_model,
                     "backend_url": f"{self.settings.ollama_url}/v1",
                     "output_language": request.output_language,
                     "max_debate_rounds": request.debate_rounds,
@@ -111,13 +133,15 @@ class TradingAgentsAdapter:
                     "temperature": 0.1,
                     "llm_max_retries": 1,
                     "benchmark_ticker": "DX-Y.NYB",
+                    "max_tokens": 700,
                 }
             )
             symbol = request.pair.replace("_", "")
             trade_date = request.trade_date or date.today().isoformat()
+            analysts = [a.strip() for a in (request.analysts or ["market"]) if a.strip()]
             try:
                 graph = TradingAgentsGraph(
-                    selected_analysts=["market", "social", "news"],
+                    selected_analysts=analysts,
                     debug=False,
                     config=config,
                 )
