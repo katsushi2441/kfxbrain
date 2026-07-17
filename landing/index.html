@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kurage FX Brain — Five open-source trading intelligences, one metered brain</title>
-<meta name="description" content="29 FX judgment skills built from vendored open-source trading intelligence (TradingAgents, FinGPT, ai-hedge-fund, FinRobot, FinMem) running on local Gemma 4 12B. Pay per call via x402 — USDC on Base or JPYC on Polygon. Judgment only: no broker credentials, no order execution.">
+<meta name="description" content="34 FX judgment skills built from vendored open-source trading intelligence (TradingAgents, FinGPT, ai-hedge-fund, FinRobot, FinMem) running on local Gemma 4 12B. Pay per call via x402 — USDC on Base or JPYC on Polygon. Judgment only: no broker credentials, no order execution.">
 <link rel="canonical" href="https://kfxbrain.exbridge.jp/">
 <link rel="alternate" hreflang="ja" href="https://kfxbrain.exbridge.jp/kfxbrain.html">
 <meta property="og:title" content="Kurage FX Brain — OSS trading intelligence as a metered x402 API">
-<meta property="og:description" content="TradingAgents + FinGPT + ai-hedge-fund + FinRobot + FinMem, pinned and attributed, on local Gemma 4 12B. 29 skills, $0.05 per call. Try it free in the browser workbench.">
+<meta property="og:description" content="TradingAgents + FinGPT + ai-hedge-fund + FinRobot + FinMem, pinned and attributed, on local Gemma 4 12B. 34 skills, $0.05 per call. Try it free in the browser workbench.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kfxbrain.exbridge.jp/">
 <meta property="og:site_name" content="Kurage FX Brain">
@@ -122,7 +122,7 @@ footer a { color: var(--accent); font-weight: 700; }
 
 <div class="hero">
   <div>
-    <span class="eyebrow"><span class="dot"></span>29 SKILLS · GEMMA 4 12B · PAY PER CALL</span>
+    <span class="eyebrow"><span class="dot"></span>34 SKILLS · GEMMA 4 12B · PAY PER CALL</span>
     <h1>Five open-source trading intelligences. <em>One metered brain.</em></h1>
     <p class="lead">
       Kurage FX Brain vendors the LLM intelligence of five popular open-source trading projects —
@@ -190,6 +190,13 @@ footer a { color: var(--accent); font-weight: 700; }
       exactly as the paper designed. A reflection endpoint turns outcomes into storable lessons.</p>
     </div>
     <div class="card">
+      <span class="tag new">ORIGINAL · NEW</span>
+      <h3>Market intelligence</h3>
+      <p>Not vendored — kfxbrain originals: rank up to 40 pairs in one call (risk-adjusted
+      opportunity or currency flow), cross-pair anomaly detection, margin-call / stop-out risk
+      ranking, and a single-pair evidence-bounded signal. Uses only the evidence you supply.</p>
+    </div>
+    <div class="card">
       <span class="tag">TRUST BOUNDARY</span>
       <h3>The brain can't touch money</h3>
       <p>No broker credentials, no order sizes, no execution — ever. Visible errors instead of silent
@@ -213,7 +220,7 @@ footer a { color: var(--accent); font-weight: 700; }
     <pre>curl -X POST https://bittensorman.xyz/fxbrain/finmem/decide
 # → HTTP 402: {"maxAmountRequired":"50000", "payTo":"0x444f…", "network":"base", …}</pre>
     <p>The full catalog is machine-readable at
-    <code>https://bittensorman.xyz/.well-known/x402.json</code> — 27 paths under <code>/fxbrain/</code>.
+    <code>https://bittensorman.xyz/.well-known/x402.json</code> — 37 paths under <code>/fxbrain/</code>.
     JPYC rail: <code>https://exbridge.ddns.net:18327/fxbrain/…</code> (7.5 JPYC per call, 75 JPYC for the
     full graph). Also on <a href="https://x402.bankr.bot/0x444fadbd6e1fed0cfbf7613b6c9f91b9021eecbd/fxbrain" style="color:var(--accent);font-weight:700">Bankr</a>.</p>
   </div>
@@ -229,6 +236,7 @@ footer a { color: var(--accent); font-weight: 700; }
     <tr><td>ai-hedge-fund (2)</td><td>news-sentiment / portfolio</td><td>$0.05</td><td>7.5 JPYC</td></tr>
     <tr><td>FinRobot (9)</td><td>forecast / report/{8 sections}</td><td>$0.05</td><td>7.5 JPYC</td></tr>
     <tr><td>FinMem (2)</td><td>decide / reflect</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td>Market intelligence (5)</td><td>opportunity/flow ranking, anomaly, margin-risk, pair signal</td><td>$0.05</td><td>7.5 JPYC</td></tr>
     <tr><td><strong>TradingAgents full graph</strong></td><td>~5.5 min multi-agent debate</td><td><strong>$0.50</strong></td><td><strong>75 JPYC</strong></td></tr>
   </table></div>
 </section>

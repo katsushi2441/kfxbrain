@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kurage FX Brain — 5つのOSSトレーディング知能を、1つの従量課金の頭脳に</title>
-<meta name="description" content="人気OSS(TradingAgents/FinGPT/ai-hedge-fund/FinRobot/FinMem)のLLM知能をコミット固定でvendor化し、ローカルGemma 4 12Bで動かすFX判断API 29スキル。x402で1回ずつ支払い(USDC on Base / JPYC on Polygon)。判断のみ・ブローカー認証情報なし・注文実行なし。">
+<meta name="description" content="人気OSS(TradingAgents/FinGPT/ai-hedge-fund/FinRobot/FinMem)のLLM知能をコミット固定でvendor化し、ローカルGemma 4 12Bで動かすFX判断API 34スキル。x402で1回ずつ支払い(USDC on Base / JPYC on Polygon)。判断のみ・ブローカー認証情報なし・注文実行なし。">
 <link rel="canonical" href="https://kfxbrain.exbridge.jp/kfxbrain.html">
 <link rel="alternate" hreflang="en" href="https://kfxbrain.exbridge.jp/">
 <meta property="og:title" content="Kurage FX Brain — OSSトレーディング知能を従量課金APIに">
-<meta property="og:description" content="TradingAgents+FinGPT+ai-hedge-fund+FinRobot+FinMemをローカルGemma 4 12Bで。29スキル、1回$0.05。ブラウザのWorkbenchで無料で試せます。">
+<meta property="og:description" content="TradingAgents+FinGPT+ai-hedge-fund+FinRobot+FinMemをローカルGemma 4 12Bで。34スキル、1回$0.05。ブラウザのWorkbenchで無料で試せます。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kfxbrain.exbridge.jp/kfxbrain.html">
 <meta property="og:site_name" content="Kurage FX Brain">
@@ -122,7 +122,7 @@ footer a { color: var(--accent); font-weight: 700; }
 
 <div class="hero">
   <div>
-    <span class="eyebrow"><span class="dot"></span>29スキル · GEMMA 4 12B · 1コールごとの従量課金</span>
+    <span class="eyebrow"><span class="dot"></span>34スキル · GEMMA 4 12B · 1コールごとの従量課金</span>
     <h1>5つのOSSトレーディング知能を、<em>1つの従量課金の頭脳</em>に。</h1>
     <p class="lead">
       Kurage FX Brainは、GitHubで人気のトレーディングOSS——<strong>TradingAgents・FinGPT・
@@ -188,6 +188,13 @@ footer a { color: var(--accent); font-weight: 700; }
       教訓に変換します。</p>
     </div>
     <div class="card">
+      <span class="tag new">ORIGINAL · NEW</span>
+      <h3>マーケットインテリジェンス</h3>
+      <p>vendorではなくkfxbrain独自の複数ペア分析: 最大40ペアを1コールでランキング
+      (リスク調整後の機会/資金フロー)、横断的な異常検知、追証・強制ロスカットリスク判定、
+      単一ペアのevidence限定シグナル。渡されたevidence以外は使わない設計。</p>
+    </div>
+    <div class="card">
       <span class="tag">TRUST BOUNDARY</span>
       <h3>頭脳はお金に触れない</h3>
       <p>ブローカー認証情報なし・数量決定なし・執行なし。静かなフォールバックはせず、失敗は見えるエラーで
@@ -211,7 +218,7 @@ footer a { color: var(--accent); font-weight: 700; }
     <pre>curl -X POST https://bittensorman.xyz/fxbrain/finmem/decide
 # → HTTP 402: {"maxAmountRequired":"50000", "payTo":"0x444f…", "network":"base", …}</pre>
     <p>全カタログは機械可読で公開:
-    <code>https://bittensorman.xyz/.well-known/x402.json</code> ——<code>/fxbrain/</code>配下に27パス。
+    <code>https://bittensorman.xyz/.well-known/x402.json</code> ——<code>/fxbrain/</code>配下に37パス。
     JPYCレール: <code>https://exbridge.ddns.net:18327/fxbrain/…</code>(1回7.5 JPYC、フルグラフ75 JPYC)。
     <a href="https://x402.bankr.bot/0x444fadbd6e1fed0cfbf7613b6c9f91b9021eecbd/fxbrain" style="color:var(--accent);font-weight:700">Bankr</a>からも利用可。</p>
   </div>
@@ -227,6 +234,7 @@ footer a { color: var(--accent); font-weight: 700; }
     <tr><td>ai-hedge-fund (2)</td><td>news-sentiment / portfolio</td><td>$0.05</td><td>7.5 JPYC</td></tr>
     <tr><td>FinRobot (9)</td><td>forecast / report/{8 sections}</td><td>$0.05</td><td>7.5 JPYC</td></tr>
     <tr><td>FinMem (2)</td><td>decide / reflect</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td>マーケットインテリジェンス (5)</td><td>opportunity/flowランキング・異常検知・追証リスク・ペアシグナル</td><td>$0.05</td><td>7.5 JPYC</td></tr>
     <tr><td><strong>TradingAgentsフルグラフ</strong></td><td>約5.5分のマルチエージェント討論</td><td><strong>$0.50</strong></td><td><strong>75 JPYC</strong></td></tr>
   </table></div>
 </section>
