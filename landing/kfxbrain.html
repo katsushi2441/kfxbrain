@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kurage FX Brain — 5つのOSSトレーディング知能を、1つの従量課金の頭脳に</title>
+<meta name="description" content="人気OSS(TradingAgents/FinGPT/ai-hedge-fund/FinRobot/FinMem)のLLM知能をコミット固定でvendor化し、ローカルGemma 4 12Bで動かすFX判断API 29スキル。x402で1回ずつ支払い(USDC on Base / JPYC on Polygon)。判断のみ・ブローカー認証情報なし・注文実行なし。">
+<link rel="canonical" href="https://kfxbrain.exbridge.jp/kfxbrain.html">
+<link rel="alternate" hreflang="en" href="https://kfxbrain.exbridge.jp/">
+<meta property="og:title" content="Kurage FX Brain — OSSトレーディング知能を従量課金APIに">
+<meta property="og:description" content="TradingAgents+FinGPT+ai-hedge-fund+FinRobot+FinMemをローカルGemma 4 12Bで。29スキル、1回$0.05。ブラウザのWorkbenchで無料で試せます。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kfxbrain.exbridge.jp/kfxbrain.html">
+<meta property="og:site_name" content="Kurage FX Brain">
+<meta property="og:image" content="https://kfxbrain.exbridge.jp/assets/kurage_avatar.png">
+<meta name="twitter:card" content="summary">
+<style>
+:root {
+  --ink: #241a4d; --muted: #6d679a; --sea: #8f7ae8; --line: #ded4f6;
+  --accent: #6c4fd4; --accent2: #5136b0; --soft: #f2edfd;
+  --paper: rgba(255,255,255,.92); --up: #1baf7a; --down: #d6453d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  color: var(--ink);
+  font-family: -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  background:
+    radial-gradient(1300px 500px at 15% -8%, rgba(143,122,232,.15), transparent 55%),
+    radial-gradient(900px 400px at 92% 5%, rgba(182,146,250,.12), transparent 50%),
+    linear-gradient(160deg, #fff 0%, #f1edff 50%, #f8f5ff 100%);
+  min-height: 100vh; line-height: 1.7; overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; }
+header {
+  position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.86);
+  backdrop-filter: blur(16px); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; padding: 10px 24px; gap: 12px;
+}
+.hbrand { font-weight: 900; font-size: 16px; }
+.hbrand sub { font-size: 11px; font-weight: 700; color: var(--muted); display: block; margin-top: -2px; }
+.hnav { display: flex; gap: 8px; align-items: center; margin-left: auto; }
+.btn { border-radius: 999px; padding: 9px 16px; font-weight: 900; font-size: 13px; display: inline-flex; align-items: center; gap: 7px; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 8px 20px rgba(108,79,212,.26); }
+.btn-ghost { background: #fff; border: 1.5px solid var(--line); color: var(--muted); }
+.hero {
+  max-width: 1040px; margin: 0 auto; padding: 56px 24px 30px;
+  display: grid; grid-template-columns: 1.2fr .8fr; gap: 36px; align-items: center;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; background: #fff;
+  border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 14px;
+  font-size: 12px; font-weight: 900; color: var(--accent); margin-bottom: 18px;
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sea); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: .5; transform: scale(.8);} }
+h1 { font-size: clamp(28px, 4.2vw, 44px); font-weight: 900; line-height: 1.18; letter-spacing: -.02em; margin-bottom: 16px; }
+h1 em { font-style: normal; color: var(--accent); }
+.lead { font-size: 15.5px; line-height: 1.9; color: #45406a; max-width: 600px; margin-bottom: 22px; }
+.cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-avatar {
+  background: var(--paper); border: 1.5px solid var(--line); border-radius: 28px;
+  padding: 26px 22px 18px; text-align: center; box-shadow: 0 22px 70px rgba(108,79,212,.14);
+}
+.hero-avatar img { height: 300px; width: auto; }
+.hero-avatar h2 { font-size: 17px; margin: 8px 0 4px; }
+.hero-avatar p { font-size: 12.5px; color: #4f477a; line-height: 1.7; }
+.disclaimer { max-width: 1040px; margin: 0 auto; padding: 0 24px 8px; }
+.disclaimer div {
+  background: #fff7e6; border: 1.5px solid #f4d9a6; color: #8a6100;
+  border-radius: 14px; padding: 12px 18px; font-size: 13px; font-weight: 700;
+}
+section { max-width: 1040px; margin: 0 auto; padding: 34px 24px; }
+section > h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 900; margin-bottom: 6px; }
+section > .sub { color: var(--muted); font-size: 14px; font-weight: 700; margin-bottom: 22px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.card {
+  background: var(--paper); border: 1.5px solid var(--line); border-radius: 24px;
+  padding: 24px; box-shadow: 0 12px 36px rgba(30,22,61,.06);
+}
+.card .tag { display: inline-block; background: var(--soft); color: var(--accent2); border-radius: 999px; padding: 3px 12px; font-size: 11.5px; font-weight: 900; margin-bottom: 10px; }
+.card .tag.new { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+.card h3 { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+.card p { font-size: 13.5px; color: #4f477a; line-height: 1.8; }
+.card code, .try code { background: var(--soft); border-radius: 6px; padding: 1px 6px; font-size: 12px; }
+.try {
+  background: var(--paper); border: 1.5px solid var(--line); border-radius: 24px;
+  padding: 28px; box-shadow: 0 12px 36px rgba(30,22,61,.06);
+}
+.try h3 { font-size: 16px; font-weight: 900; margin: 14px 0 6px; }
+.try p { font-size: 13.5px; color: #4f477a; line-height: 1.8; }
+.try pre {
+  background: #1e1935; color: #e8e3ff; border-radius: 14px; padding: 14px 16px;
+  font-size: 12.5px; overflow-x: auto; margin: 10px 0;
+}
+.links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+table { width: 100%; border-collapse: collapse; background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; overflow: hidden; font-size: 13px; }
+th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+th { background: var(--soft); font-size: 12px; }
+.tscroll { overflow-x: auto; border-radius: 14px; }
+footer { text-align: center; color: var(--muted); font-size: 12.5px; padding: 40px 20px 46px; border-top: 1px solid var(--line); margin-top: 30px; }
+footer a { color: var(--accent); font-weight: 700; }
+@media (max-width: 760px) {
+  header { padding: 9px 12px; flex-wrap: wrap; }
+  .hbrand { font-size: 14px; } .hbrand sub { display: none; }
+  .hnav { width: 100%; margin-left: 0; }
+  .hero { grid-template-columns: 1fr; padding-top: 34px; }
+  .hero-avatar img { height: 200px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbrand">Kurage FX Brain<sub>kfxbrain — OSSトレーディング知能をx402従量課金で</sub></div>
+  <nav class="hnav">
+    <a class="btn btn-ghost" href="index.html">English</a>
+    <a class="btn btn-primary" href="https://kurage.exbridge.jp/kfxbrain.php">Workbenchで試す</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div>
+    <span class="eyebrow"><span class="dot"></span>29スキル · GEMMA 4 12B · 1コールごとの従量課金</span>
+    <h1>5つのOSSトレーディング知能を、<em>1つの従量課金の頭脳</em>に。</h1>
+    <p class="lead">
+      Kurage FX Brainは、GitHubで人気のトレーディングOSS——<strong>TradingAgents・FinGPT・
+      ai-hedge-fund・FinRobot・FinMem</strong>——のLLM知能をコミット固定・出典明記でvendor化し、
+      <strong>ローカルのGemma 4 12B</strong>で動かすFX判断APIです。支払いは<strong>x402</strong>で
+      1コールごと(USDC on Base / JPYC on Polygon)。会員登録もサブスクも不要——402チャレンジ
+      そのものがオンボーディングです。判断のみを返し、ブローカー認証情報を持たず、注文も実行しません。
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://kurage.exbridge.jp/kfxbrain.php">Workbenchで無料で試す</a>
+      <a class="btn btn-ghost" href="https://github.com/katsushi2441/kfxbrain">GitHub</a>
+      <a class="btn btn-ghost" href="https://bittensorman.xyz/.well-known/x402.json">x402ディスカバリ</a>
+    </div>
+  </div>
+  <div class="hero-avatar">
+    <img src="assets/kurage_avatar.webp" alt="Kurage — jellyfish AI VTuber" loading="eager">
+    <h2>Kurage 🪼</h2>
+    <p><a href="https://kfreqai.exbridge.jp/kfreqai.html" style="color:var(--accent);font-weight:700">kfreqai</a>と<a href="https://kfxai.exbridge.jp/kfxai.html" style="color:var(--accent);font-weight:700">kfxai</a>を運用するクラゲのAI VTuber。これは彼女の「貸し出し用の頭脳」です。</p>
+  </div>
+</div>
+
+<div class="disclaimer">
+  <div>⚠️ 分析・判断のみを提供します——投資助言ではなく、注文執行も一切しません。
+  出力は渡されたevidenceに基づくLLMの見解で、データが足りない場合は捏造せず「足りない」と正直に返します。
+  FXにはレバレッジリスクがあります。</div>
+</div>
+
+<section>
+  <h2>vendor化したOSSアンソロジー</h2>
+  <p class="sub">コミット固定・許諾的ライセンスのみ・全レスポンスに出典を明記。ライセンス無しのOSSはvendorしない(調査済み)。</p>
+  <div class="grid">
+    <div class="card">
+      <span class="tag">Apache-2.0</span>
+      <h3>TradingAgents</h3>
+      <p>上流のマルチエージェントグラフを改変せず完全実行: アナリストレポート→強弱討論→トレーダー計画→
+      リスク討論→最終判断を実データで。実測1回約5.5分の計算資源のため$0.50。それ以外は全て$0.05。</p>
+    </div>
+    <div class="card">
+      <span class="tag">MIT</span>
+      <h3>FinGPT</h3>
+      <p>金融NLPタスク7種: センチメント・ヘッドライン分類・関係抽出・固有表現抽出・Q&amp;A・
+      Forecaster・レポート分析——全て厳密なJSONで返します。</p>
+    </div>
+    <div class="card">
+      <span class="tag">MIT</span>
+      <h3>ai-hedge-fund</h3>
+      <p>13人の投資家人格(Buffett、Munger、Burry…)を上流のプロンプト生成関数のまま実行し、LLM輸送層だけを
+      差替え。設計から正直で、Buffett人格は通貨を「専門外」と答えます(実測済み)。ニュース感情と
+      ポートフォリオ統合も。</p>
+    </div>
+    <div class="card">
+      <span class="tag new">Apache-2.0 · NEW</span>
+      <h3>FinRobot</h3>
+      <p>Market Forecasterワークフロー(材料と懸念を2〜4個ずつ+翌週の値動きを%レンジで予測)と、
+      アナリスト指示8種——損益計算書・バランスシート・キャッシュフロー・セグメント・リスク・競合・
+      ハイライト・企業概要——を固定コミットのソースから実行時に抽出。</p>
+    </div>
+    <div class="card">
+      <span class="tag new">MIT · NEW</span>
+      <h3>FinMem</h3>
+      <p>階層メモリ判断: short/mid/long/reflectionの記憶を渡すとエージェントが判断——累計損益に応じて
+      リスク選好/回避の性格が切り替わる、論文どおりの設計。反省エンドポイントは結果を保存可能な
+      教訓に変換します。</p>
+    </div>
+    <div class="card">
+      <span class="tag">TRUST BOUNDARY</span>
+      <h3>頭脳はお金に触れない</h3>
+      <p>ブローカー認証情報なし・数量決定なし・執行なし。静かなフォールバックはせず、失敗は見えるエラーで
+      返します。最終的なリスクゲートはあなたが動かすボディ側(OSSの<a href="https://kfxai.exbridge.jp/kfxai.html" style="color:var(--accent);font-weight:700">kfxai</a>など)が持ちます。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>払う前に試せる——2つの方法</h2>
+  <p class="sub">「信じてください」は営業トークにならないので、検証手段を組み込みました。</p>
+  <div class="try">
+    <h3>1. 無料のブラウザWorkbench</h3>
+    <p>The <a href="https://kurage.exbridge.jp/kfxbrain.php" style="color:var(--accent);font-weight:700">FX Intelligence Workbench</a>
+    は本番と同じAPIを叩くライブコンソールです。エンドポイントを選び、EUR/JPYプリセットか自分の
+    evidence JSONを貼れば、構造化された判断が返ります。Gemmaバックエンドの死活表示付き。
+    1円も払う前に品質を自分の目で確かめてください。</p>
+    <h3>2. 支払いなしでx402の動作を検証</h3>
+    <p>全ての有料エンドポイントは、未払いリクエストに402チャレンジを返します。お金が動く前に、
+    正確な価格・ウォレット・ネットワークを確認できます:</p>
+    <pre>curl -X POST https://bittensorman.xyz/fxbrain/finmem/decide
+# → HTTP 402: {"maxAmountRequired":"50000", "payTo":"0x444f…", "network":"base", …}</pre>
+    <p>全カタログは機械可読で公開:
+    <code>https://bittensorman.xyz/.well-known/x402.json</code> ——<code>/fxbrain/</code>配下に27パス。
+    JPYCレール: <code>https://exbridge.ddns.net:18327/fxbrain/…</code>(1回7.5 JPYC、フルグラフ75 JPYC)。
+    <a href="https://x402.bankr.bot/0x444fadbd6e1fed0cfbf7613b6c9f91b9021eecbd/fxbrain" style="color:var(--accent);font-weight:700">Bankr</a>からも利用可。</p>
+  </div>
+</section>
+
+<section>
+  <h2>価格</h2>
+  <p class="sub">1コールごとオンチェーン決済。アカウント不要・最低利用額なし。</p>
+  <div class="tscroll"><table>
+    <tr><th>スキル群</th><th>例</th><th>USDC (Base)</th><th>JPYC (Polygon)</th></tr>
+    <tr><td>FX判断コア (9)</td><td>technical / macro / sentiment / decide / risk / review / full</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td>FinGPTタスク (4)</td><td>sentiment / headline / forecast / report</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td>ai-hedge-fund (2)</td><td>news-sentiment / portfolio</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td>FinRobot (9)</td><td>forecast / report/{8 sections}</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td>FinMem (2)</td><td>decide / reflect</td><td>$0.05</td><td>7.5 JPYC</td></tr>
+    <tr><td><strong>TradingAgentsフルグラフ</strong></td><td>約5.5分のマルチエージェント討論</td><td><strong>$0.50</strong></td><td><strong>75 JPYC</strong></td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>スタック</h2>
+  <p class="sub">FastAPI · local Gemma 4 12B via Ollama · vendored OSS at pinned commits · x402 (USDC on Base / JPYC on Polygon) · Bankr · Coinbase CDP Bazaar</p>
+</section>
+
+<footer>
+  Kurage FX Brain — <a href="https://exbridge.jp/">exBridge</a>のプロダクト ·
+  <a href="index.html">English version</a> ·
+  <a href="https://kfxai.exbridge.jp/">kfxai (FXボディ)</a> ·
+  <a href="https://kfreqai.exbridge.jp/">kfreqai (暗号資産)</a> ·
+  <a href="https://aiknowledgecms.exbridge.jp/url2ai.html">URL2AI</a><br>
+  判断APIのみ。投資助言ではありません。
+</footer>
+
+</body>
+</html>
