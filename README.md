@@ -36,6 +36,16 @@ TradingAgentsは上流グラフをパッチせず実行します。AI Hedge Fund
 - `POST /v1/review/trade` - 取引後レビュー
 - `POST /v1/analyze/full` - 全観点を1回で返す総合分析
 
+## FX market intelligence APIs
+
+- `POST /v1/market/opportunity-ranking` - 複数通貨ペアのリスク調整後機会ランキング
+- `POST /v1/market/flow-ranking` - COT、先物ポジション、金利差、実需などのフローランキング
+- `POST /v1/market/anomaly` - 価格、スプレッド、変動率、金利差、介入などの異常検出
+- `POST /v1/market/margin-risk` - レバレッジ、証拠金維持率、ストップアウト、ギャップの横断リスク
+- `POST /v1/signal/pair/{pair}` - 個別通貨ペアの根拠付き方向シグナル
+
+ランキング系APIは`pairs`へ最大40通貨ペアの観測値を渡します。個別シグナルはURLとJSON本文の`pair`が一致しない場合、誤判定防止のため拒否します。証拠金リスクAPIはブローカー固有ルールを推測せず、入力されていない維持率やストップアウト条件を不足情報として返します。
+
 APIは判断だけを返し、ブローカー認証情報、注文API、注文数量の決定権を持ちません。
 Gemmaが失敗した場合にテンプレートや別LLMへフォールバックせず、明示的なエラーを返します。
 

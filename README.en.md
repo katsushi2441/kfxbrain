@@ -67,6 +67,18 @@ Available personas are returned by `GET /v1/meta`. They include Aswath Damodaran
 
 The original compact FX endpoints remain available for technical, macro, sentiment, debate, trade, risk, portfolio, review, and combined analysis.
 
+### FX Market Intelligence
+
+```text
+POST /v1/market/opportunity-ranking
+POST /v1/market/flow-ranking
+POST /v1/market/anomaly
+POST /v1/market/margin-risk
+POST /v1/signal/pair/{pair}
+```
+
+Ranking endpoints accept up to 40 caller-supplied pair snapshots. Pair signals reject requests when the URL pair and JSON pair differ. Margin risk evaluates supplied leverage, free margin, stop-out, volatility, gap, event, and correlation evidence without inventing broker rules.
+
 ## Requirements
 
 - Python 3.10 or later

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kfxbrain"
-version = "0.2.0"
+version = "0.3.0"
 description = "Kurage FX Brain - vendored financial intelligence APIs powered by Gemma"
 requires-python = ">=3.10"
 dependencies = [

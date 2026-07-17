@@ -9,7 +9,7 @@ import requests
 
 from .config import Settings, settings
 from .prompts import build_prompt
-from .schemas import FxBrainRequest
+from .schemas import FxBrainRequest, FxMarketIntelligenceRequest
 
 
 class BrainError(RuntimeError):
@@ -26,7 +26,24 @@ REQUIRED_RESULT_KEYS = {
     "portfolio": {"action", "confidence", "rationale"},
     "review": {"process_quality", "classification", "lesson", "next_rule"},
     "full": {"technical", "macro", "sentiment", "debate", "trade", "risk"},
+    "market_opportunity_ranking": {"ranking"},
+    "market_flow_ranking": {"ranking"},
+    "market_anomaly": {"anomalies"},
+    "market_margin_risk": {"ranking"},
+    "pair_signal": {"pair", "direction", "action", "confidence"},
 }
+
+
+def remove_empty_keys(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: remove_empty_keys(item)
+            for key, item in value.items()
+            if str(key).strip()
+        }
+    if isinstance(value, list):
+        return [remove_empty_keys(item) for item in value]
+    return value
 
 
 def extract_json_object(text: str) -> dict[str, Any]:
@@ -36,7 +53,7 @@ def extract_json_object(text: str) -> dict[str, Any]:
     try:
         parsed = json.loads(value)
         if isinstance(parsed, dict):
-            return parsed
+            return remove_empty_keys(parsed)
     except json.JSONDecodeError:
         pass
     start = value.find("{")
@@ -45,7 +62,7 @@ def extract_json_object(text: str) -> dict[str, Any]:
         try:
             parsed = json.loads(value[start : end + 1])
             if isinstance(parsed, dict):
-                return parsed
+                return remove_empty_keys(parsed)
         except json.JSONDecodeError:
             pass
     raise BrainError("Gemma returned an invalid JSON object")
@@ -72,7 +89,7 @@ class FxBrain:
         except Exception as exc:
             return {"reachable": False, "model_available": False, "error": str(exc)[:200]}
 
-    def analyze(self, task: str, request: FxBrainRequest) -> dict[str, Any]:
+    def analyze(self, task: str, request: FxBrainRequest | FxMarketIntelligenceRequest) -> dict[str, Any]:
         evidence = request.compact_json()
         return validate_result(task, self.generate_json(build_prompt(task, evidence)))
 

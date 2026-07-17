@@ -11,7 +11,13 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from . import __version__
 from .config import settings
 from .ollama import BrainError, FxBrain
-from .schemas import BrainResponse, FxBrainRequest, TradingAgentsRequest
+from .schemas import (
+    BrainResponse,
+    FxBrainRequest,
+    FxMarketIntelligenceRequest,
+    TradingAgentsRequest,
+    normalize_pair,
+)
 from .vendor_adapters import (
     FINROBOT_SECTIONS,
     PERSONAS,
@@ -90,6 +96,11 @@ def meta() -> dict:
             "/v1/decide/portfolio",
             "/v1/review/trade",
             "/v1/analyze/full",
+            "/v1/market/opportunity-ranking",
+            "/v1/market/flow-ranking",
+            "/v1/market/anomaly",
+            "/v1/market/margin-risk",
+            "/v1/signal/pair/{pair}",
             "/v1/vendor/tradingagents/run",
             "/v1/vendor/fingpt/{task}",
             "/v1/vendor/ai-hedge-fund/persona/{persona}",
@@ -120,7 +131,7 @@ def meta() -> dict:
     }
 
 
-def run(task: str, endpoint: str, payload: FxBrainRequest) -> BrainResponse:
+def run(task: str, endpoint: str, payload: FxBrainRequest | FxMarketIntelligenceRequest) -> BrainResponse:
     started = time.monotonic()
     try:
         result = brain.analyze(task, payload)
@@ -193,6 +204,38 @@ def review(payload: FxBrainRequest):
 @app.post("/v1/analyze/full", response_model=BrainResponse, dependencies=[Depends(require_token)])
 def full(payload: FxBrainRequest):
     return run("full", "full", payload)
+
+
+def protected_market_post(path: str, task: str):
+    def endpoint(payload: FxMarketIntelligenceRequest):
+        return run(task, path, payload)
+
+    endpoint.__name__ = f"run_{task}"
+    app.post(path, response_model=BrainResponse, dependencies=[Depends(require_token)])(endpoint)
+
+
+for route, task_name in {
+    "/v1/market/opportunity-ranking": "market_opportunity_ranking",
+    "/v1/market/flow-ranking": "market_flow_ranking",
+    "/v1/market/anomaly": "market_anomaly",
+    "/v1/market/margin-risk": "market_margin_risk",
+}.items():
+    protected_market_post(route, task_name)
+
+
+@app.post(
+    "/v1/signal/pair/{pair}",
+    response_model=BrainResponse,
+    dependencies=[Depends(require_token)],
+)
+def pair_signal(pair: str, payload: FxBrainRequest):
+    try:
+        path_pair = normalize_pair(pair)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    if path_pair != payload.pair:
+        raise HTTPException(422, "path pair must match payload pair")
+    return run("pair_signal", f"/v1/signal/pair/{path_pair}", payload)
 
 
 @app.post(

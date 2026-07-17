@@ -66,6 +66,11 @@ $endpoint_map = array(
     'portfolio' => '/v1/decide/portfolio',
     'review' => '/v1/review/trade',
     'full' => '/v1/analyze/full',
+    'opportunity-ranking' => '/v1/market/opportunity-ranking',
+    'flow-ranking' => '/v1/market/flow-ranking',
+    'market-anomaly' => '/v1/market/anomaly',
+    'margin-risk' => '/v1/market/margin-risk',
+    'pair-signal' => '/v1/signal/pair/{pair}',
     'tradingagents' => '/v1/vendor/tradingagents/run',
     'fingpt-sentiment' => '/v1/vendor/fingpt/sentiment',
     'fingpt-headline' => '/v1/vendor/fingpt/headline',
@@ -129,11 +134,21 @@ if (isset($_GET['proxy'])) {
             echo json_encode(array('ok' => false, 'detail' => 'JSONを確認してください'), JSON_UNESCAPED_UNICODE);
             exit;
         }
+        $api_path = $endpoint_map[$endpoint];
+        if ($endpoint === 'pair-signal') {
+            $pair = isset($payload['pair']) ? strtoupper(str_replace(array('/', '-'), '_', trim((string)$payload['pair']))) : '';
+            if (!preg_match('/^[A-Z0-9]{2,10}_[A-Z0-9]{2,10}$/', $pair)) {
+                http_response_code(422);
+                echo json_encode(array('ok' => false, 'detail' => 'pairを確認してください'), JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+            $api_path = str_replace('{pair}', rawurlencode($pair), $api_path);
+        }
         $timeout = $endpoint === 'tradingagents' ? 1200 : 300;
         if ($endpoint === 'tradingagents') {
             @set_time_limit(0);
         }
-        $response = kfxb_api('POST', $endpoint_map[$endpoint], $payload, $timeout);
+        $response = kfxb_api('POST', $api_path, $payload, $timeout);
     } else {
         $response = array('status' => 404, 'data' => array('ok' => false, 'detail' => 'unknown proxy'));
     }
@@ -190,6 +205,14 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
           <button class="api-btn" data-key="review" data-path="/v1/review/trade">取引レビュー</button>
           <button class="api-btn" data-key="full" data-path="/v1/analyze/full">総合分析</button>
         </div>
+        <select class="vendor-select" id="marketSelect">
+          <option value="">FX Market Intelligence APIを選択</option>
+          <option value="opportunity-ranking" data-path="/v1/market/opportunity-ranking">市場機会ランキング</option>
+          <option value="flow-ranking" data-path="/v1/market/flow-ranking">通貨フローランキング</option>
+          <option value="market-anomaly" data-path="/v1/market/anomaly">市場異常検出</option>
+          <option value="margin-risk" data-path="/v1/market/margin-risk">証拠金・ストップアウトリスク</option>
+          <option value="pair-signal" data-path="/v1/signal/pair/{pair}">個別通貨ペアシグナル</option>
+        </select>
         <select class="vendor-select" id="vendorSelect">
           <option value="">OSS Intelligence APIを選択</option>
           <optgroup label="TradingAgents">
@@ -242,13 +265,15 @@ const csrf=<?php echo json_encode($csrf, JSON_UNESCAPED_SLASHES); ?>;
 const presets={
 eur:{pair:"EUR_USD",timeframe:"H1",as_of:new Date().toISOString(),market:{price:1.0862,spread_pips:0.8,atr_pips:14.2,session:"London"},technicals:{return_1h_pct:0.18,return_24h_pct:0.42,rsi_14:57.2,ema_20:1.0841,ema_50:1.0818,macd_histogram:0.00031,support:1.0825,resistance:1.0890},macro:{ecb_policy:"restrictive but easing bias",fed_policy:"data dependent",rate_differential_pct:1.4,next_events:["US CPI in 18 hours"]},news:[{title:"ECB officials signal decisions remain data dependent",sentiment:"neutral"}],position:{side:"flat",account_risk_remaining_pct:0.7},history:[],prior_reports:{},question:"次の4時間で新規エントリーを検討できるか"},
 jpy:{pair:"USD_JPY",timeframe:"H1",as_of:new Date().toISOString(),market:{price:156.42,spread_pips:1.0,atr_pips:22.6,session:"Tokyo"},technicals:{return_1h_pct:-0.12,return_24h_pct:0.68,rsi_14:66.5,ema_20:155.94,ema_50:154.88,macd_histogram:0.061,support:155.70,resistance:157.10},macro:{boj_policy:"normalization risk",fed_policy:"data dependent",intervention_risk:"elevated",next_events:["BOJ governor speech in 6 hours"]},news:[{title:"Officials reiterate readiness to respond to excessive FX moves",sentiment:"negative for USD_JPY"}],position:{side:"long",unrealized_pips:18,account_risk_remaining_pct:0.3},history:[],prior_reports:{},question:"保有継続か縮小かを評価"},
+market:{timeframe:"H1",as_of:new Date().toISOString(),global_context:{dxy_return_24h_pct:0.35,risk_sentiment:"mixed",next_events:["US CPI in 18 hours"]},account_context:{leverage:25,equity:100000,used_margin:12000,free_margin:88000,margin_level_pct:833,stop_out_level_pct:100},pairs:[{pair:"EUR_USD",market:{price:1.0862,spread_pips:0.8,atr_pips:14.2,return_24h_pct:0.42},technicals:{rsi_14:57.2},macro:{rate_differential_pct:1.4},flows:{futures_net_change_pct:2.1,real_money_flow:"moderate EUR buying"},positioning:{cot_percentile:62}},{pair:"USD_JPY",market:{price:156.42,spread_pips:1.0,atr_pips:22.6,return_24h_pct:0.68},technicals:{rsi_14:66.5},macro:{intervention_risk:"elevated",rate_differential_pct:4.1},flows:{carry_flow:"strong"},positioning:{speculative_net_percentile:87}},{pair:"GBP_USD",market:{price:1.294,spread_pips:1.1,atr_pips:18.4,return_24h_pct:-0.25},technicals:{rsi_14:43.8},macro:{rate_differential_pct:1.1},flows:{futures_net_change_pct:-3.4},positioning:{cot_percentile:38}}],question:"機会、フロー、異常、証拠金リスクを比較"},
 tradingagents:{pair:"EUR_USD",trade_date:new Date().toISOString().slice(0,10),debate_rounds:1,risk_rounds:1,output_language:"Japanese"}
 };
 let endpoint="technical";
 const editor=document.querySelector('#payload'),result=document.querySelector('#result'),run=document.querySelector('#runBtn');
 function setPreset(value){editor.value=JSON.stringify(value,null,2)}setPreset(presets.eur);
-document.querySelectorAll('.api-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelector('#vendorSelect').value='';endpoint=btn.dataset.key;document.querySelector('#endpointPath').textContent=btn.dataset.path}));
-document.querySelector('#vendorSelect').addEventListener('change',e=>{if(!e.target.value)return;document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));endpoint=e.target.value;const option=e.target.options[e.target.selectedIndex];document.querySelector('#endpointPath').textContent=option.dataset.path;if(endpoint==='tradingagents')setPreset(presets.tradingagents);else if(!editor.value.trim()||!editor.value.includes('"market"'))setPreset(presets.eur)});
+document.querySelectorAll('.api-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelector('#vendorSelect').value='';document.querySelector('#marketSelect').value='';endpoint=btn.dataset.key;document.querySelector('#endpointPath').textContent=btn.dataset.path}));
+document.querySelector('#vendorSelect').addEventListener('change',e=>{if(!e.target.value)return;document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));document.querySelector('#marketSelect').value='';endpoint=e.target.value;const option=e.target.options[e.target.selectedIndex];document.querySelector('#endpointPath').textContent=option.dataset.path;if(endpoint==='tradingagents')setPreset(presets.tradingagents);else if(!editor.value.trim()||!editor.value.includes('"market"'))setPreset(presets.eur)});
+document.querySelector('#marketSelect').addEventListener('change',e=>{if(!e.target.value)return;document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));document.querySelector('#vendorSelect').value='';endpoint=e.target.value;const option=e.target.options[e.target.selectedIndex];document.querySelector('#endpointPath').textContent=option.dataset.path;setPreset(endpoint==='pair-signal'?presets.eur:presets.market)});
 document.querySelector('#eurPreset').onclick=()=>setPreset(presets.eur);document.querySelector('#jpyPreset').onclick=()=>setPreset(presets.jpy);
 document.querySelector('#formatBtn').onclick=()=>{try{setPreset(JSON.parse(editor.value))}catch(e){showError('JSON: '+e.message)}};
 function showError(message){result.className='result error';result.textContent=message;document.querySelector('#statusMetric').textContent='ERROR'}
