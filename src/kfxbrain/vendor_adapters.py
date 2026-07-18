@@ -114,7 +114,7 @@ class TradingAgentsAdapter:
             work = Path(__file__).resolve().parents[2] / "data" / "tradingagents"
             # リバースプロキシの読み取り上限(180秒)に収めるための高速プロファイル
             # (PayApi/Chet 2026-07-18指摘)。5.5分の主因は長文レポート×多数の逐次LLM。
-            # 対策: quick-thinkを高速モデル(e4b)に、reasoning系の deep-think だけ12bを維持、
+            # 対策: deep/quickともe4bに、max_tokensで長文暴走を抑制(隠れ推論分の余裕を持たせ900)、
             # 分析役を市場のみ(fast_analysts)に絞り、討論/リスクは各1ラウンド。
             # 深い判断が要る場合は debate_rounds/risk_rounds を上げて呼び出し側で許容する。
             config.update(
@@ -133,7 +133,7 @@ class TradingAgentsAdapter:
                     "temperature": 0.1,
                     "llm_max_retries": 1,
                     "benchmark_ticker": "DX-Y.NYB",
-                    "max_tokens": 700,
+                    "max_tokens": 900,
                 }
             )
             symbol = request.pair.replace("_", "")
@@ -157,13 +157,22 @@ class TradingAgentsAdapter:
             "trader_investment_plan",
             "final_trade_decision",
         )
+        reports = {field: state.get(field, "") for field in fields}
+        # 完全性チェック(PayApi/Chet 2026-07-18): gemma4の隠れ推論がmax_tokensを食うと、
+        # 時間内でも最終判断が空/途中で切れて200のまま決済され得る("静かな失敗")。
+        # 決定的な成果物(signal + 最終判断)が欠けたら例外→502→x402はsettleをスキップ=課金なし。
+        decision = (reports.get("final_trade_decision") or "").strip()
+        if not signal or len(decision) < 80:
+            raise BrainError(
+                "TradingAgents produced an incomplete result "
+                f"(signal={signal!r}, decision_len={len(decision)}); not billable")
         return {
             "vendor": UPSTREAM["tradingagents"],
             "function": "TradingAgentsGraph.propagate",
             "symbol": symbol,
             "trade_date": trade_date,
             "signal": signal,
-            "reports": {field: state.get(field, "") for field in fields},
+            "reports": reports,
             "debates": {
                 "investment": state.get("investment_debate_state", {}),
                 "risk": state.get("risk_debate_state", {}),
