@@ -173,11 +173,12 @@ header{height:58px;border-bottom:1px solid var(--line);background:rgba(255,255,2
 .brand{display:flex;align-items:center;gap:11px}.mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,var(--aqua),var(--navy));display:grid;place-items:center;color:#fff;font-size:13px;font-weight:900}.brand strong{font-size:16px;letter-spacing:.01em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.16em;margin-top:1px}.user{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px}.user a{color:var(--navy);text-decoration:none;border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:7px}
 .shell{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:18px 22px 28px}.intro{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:14px}.intro h1{font-size:23px;line-height:1.25;margin:0 0 5px;letter-spacing:-.02em}.intro p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}.health{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);padding:7px 11px;border-radius:9px;font-size:11px;font-weight:800;white-space:nowrap}.dot{width:8px;height:8px;border-radius:50%;background:#9aa}.dot.ok{background:#27a56d;box-shadow:0 0 0 4px rgba(39,165,109,.12)}.dot.bad{background:var(--coral)}
 .workspace{display:grid;grid-template-columns:minmax(420px,.94fr) minmax(440px,1.06fr);gap:14px;min-height:590px}.panel{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;min-width:0}.panel-head{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--line);background:#fbfdfc}.panel-head strong{font-size:13px}.panel-head span{color:var(--muted);font-size:10px}.panel-body{padding:14px}
-.api-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}.api-btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:8px;padding:8px 7px;font:700 11px/1.25 inherit;cursor:pointer}.api-btn:hover{border-color:#90cbd2}.api-btn.active{color:#fff;background:linear-gradient(135deg,var(--aqua),#177184);border-color:transparent}.vendor-select{width:100%;margin-bottom:10px;border:1px solid #b8d3d1;border-radius:8px;background:#f5fbfa;color:var(--navy);padding:8px 10px;font:700 11px inherit}.toolbar{display:flex;gap:7px;margin-bottom:9px}.tool{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:7px;padding:6px 9px;font:700 11px inherit;cursor:pointer}.editor{display:block;width:100%;height:336px;resize:vertical;border:1px solid #cadbd8;border-radius:9px;background:var(--code);padding:12px;color:#1c3840;font:12px/1.55 "IBM Plex Mono","SFMono-Regular",Consolas,monospace;outline:none;tab-size:2}.editor:focus{border-color:var(--aqua);box-shadow:0 0 0 3px rgba(0,141,163,.09)}.run{margin-top:10px;width:100%;border:0;border-radius:9px;background:linear-gradient(135deg,var(--navy),var(--aqua));color:#fff;padding:11px 16px;font:800 13px inherit;cursor:pointer;box-shadow:0 8px 18px rgba(0,111,137,.18)}.run:disabled{opacity:.55;cursor:wait}
-.result{height:494px;overflow:auto;margin:0;background:#102d35;color:#d7f0eb;padding:15px;font:12px/1.6 "IBM Plex Mono","SFMono-Regular",Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.result.empty{color:#8fb1b3}.result.error{color:#ffd0c9}.metrics{display:flex;gap:12px;color:var(--muted);font-size:10px}.notice{background:#fff8e8;border:1px solid #ecdbaa;border-radius:10px;padding:12px 14px;color:#705d25;line-height:1.7;font-size:12px}.login-box{max-width:520px;margin:90px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:var(--shadow);text-align:center}.login-box h2{margin:0 0 8px;font-size:19px}.login-box p{color:var(--muted);line-height:1.7}.login-box a{display:inline-block;margin-top:8px;background:var(--navy);color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:800}
+.steps{display:flex;align-items:center;gap:6px;margin-bottom:10px;color:var(--muted);font-size:10px}.steps b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--mint);color:var(--aqua);font-size:10px}.steps i{height:1px;flex:1;background:var(--line)}
+.function-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px}.function-tab{border:1px solid var(--line);border-radius:8px;background:#f8fbfa;color:var(--muted);padding:8px 4px;font:800 11px/1.2 inherit;cursor:pointer}.function-tab.active{background:var(--navy);border-color:var(--navy);color:#fff}.function-pane{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-height:210px;overflow:auto;padding:1px 3px 3px 1px}.function-pane.active{display:grid}.function-card{min-height:61px;border:1px solid var(--line);border-radius:9px;background:#fff;padding:8px 9px;text-align:left;color:var(--ink);cursor:pointer}.function-card:hover{border-color:#85c5cd;background:#fbfefd}.function-card.active{border-color:var(--aqua);background:#eef9f7;box-shadow:inset 3px 0 0 var(--aqua)}.function-card strong{display:block;color:var(--navy);font-size:12px;line-height:1.25}.function-card small{display:block;margin-top:4px;color:var(--muted);font-size:10px;line-height:1.4}.selected-function{margin:9px 0;padding:9px 11px;border:1px solid #b8dcd8;border-radius:9px;background:linear-gradient(135deg,#f3fbf9,#f8fbfd)}.selected-function span{color:var(--aqua);font-size:9px;font-weight:900;letter-spacing:.12em}.selected-function strong{display:block;margin-top:2px;font-size:13px}.selected-function p{margin:3px 0 0;color:var(--muted);font-size:11px;line-height:1.45}.input-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}.input-head strong{font-size:11px}.toolbar{display:flex;gap:6px}.tool{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:7px;padding:5px 8px;font:700 10px inherit;cursor:pointer}.editor{display:block;width:100%;height:270px;resize:vertical;border:1px solid #cadbd8;border-radius:9px;background:var(--code);padding:12px;color:#1c3840;font:12px/1.55 "IBM Plex Mono","SFMono-Regular",Consolas,monospace;outline:none;tab-size:2}.editor:focus{border-color:var(--aqua);box-shadow:0 0 0 3px rgba(0,141,163,.09)}.run{margin-top:10px;width:100%;border:0;border-radius:9px;background:linear-gradient(135deg,var(--navy),var(--aqua));color:#fff;padding:11px 16px;font:800 13px inherit;cursor:pointer;box-shadow:0 8px 18px rgba(0,111,137,.18)}.run:disabled{opacity:.55;cursor:wait}
+.result{height:622px;overflow:auto;margin:0;background:#102d35;color:#d7f0eb;padding:15px;font:12px/1.6 "IBM Plex Mono","SFMono-Regular",Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.result.empty{color:#8fb1b3}.result.error{color:#ffd0c9}.metrics{display:flex;gap:12px;color:var(--muted);font-size:10px}.notice{background:#fff8e8;border:1px solid #ecdbaa;border-radius:10px;padding:12px 14px;color:#705d25;line-height:1.7;font-size:12px}.login-box{max-width:520px;margin:90px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:var(--shadow);text-align:center}.login-box h2{margin:0 0 8px;font-size:19px}.login-box p{color:var(--muted);line-height:1.7}.login-box a{display:inline-block;margin-top:8px;background:var(--navy);color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:800}
 footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:10px;padding:0 20px 22px}footer a{color:var(--aqua);text-decoration:none}
-@media(max-width:900px){header{padding:0 14px}.shell{padding:14px}.workspace{grid-template-columns:1fr}.result{height:390px}.intro{align-items:flex-start;flex-direction:column}.api-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:520px){.api-grid{grid-template-columns:repeat(2,1fr)}.editor{height:330px}.user span{display:none}.intro h1{font-size:20px}}
+@media(max-width:900px){header{padding:0 14px}.shell{padding:14px}.workspace{grid-template-columns:1fr}.result{height:390px}.intro{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){.function-tabs{grid-template-columns:repeat(2,1fr)}.function-pane{grid-template-columns:1fr;max-height:230px}.editor{height:290px}.user span{display:none}.intro h1{font-size:20px}.steps span{display:none}}
 </style>
 </head>
 <body>
@@ -194,65 +195,67 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
     <section class="panel">
       <div class="panel-head"><strong>Request</strong><span id="endpointPath">/v1/analyze/technical</span></div>
       <div class="panel-body">
-        <div class="api-grid" id="apiGrid">
-          <button class="api-btn active" data-key="technical" data-path="/v1/analyze/technical">テクニカル</button>
-          <button class="api-btn" data-key="macro" data-path="/v1/analyze/macro">マクロ</button>
-          <button class="api-btn" data-key="sentiment" data-path="/v1/analyze/sentiment">センチメント</button>
-          <button class="api-btn" data-key="debate" data-path="/v1/debate/bull-bear">強気 / 弱気</button>
-          <button class="api-btn" data-key="trade" data-path="/v1/decide/trade">売買判断</button>
-          <button class="api-btn" data-key="risk" data-path="/v1/assess/risk">リスク</button>
-          <button class="api-btn" data-key="portfolio" data-path="/v1/decide/portfolio">保有管理</button>
-          <button class="api-btn" data-key="review" data-path="/v1/review/trade">取引レビュー</button>
-          <button class="api-btn" data-key="full" data-path="/v1/analyze/full">総合分析</button>
+        <div class="steps"><b>1</b><span>機能を選ぶ</span><i></i><b>2</b><span>入力を確認</span><i></i><b>3</b><span>実行する</span></div>
+        <div class="function-tabs" role="tablist" aria-label="機能カテゴリ">
+          <button class="function-tab active" data-tab="basic" role="tab" aria-selected="true">基本分析</button>
+          <button class="function-tab" data-tab="decision" role="tab" aria-selected="false">売買判断</button>
+          <button class="function-tab" data-tab="market" role="tab" aria-selected="false">市場スキャン</button>
+          <button class="function-tab" data-tab="oss" role="tab" aria-selected="false">OSSエージェント</button>
         </div>
-        <select class="vendor-select" id="marketSelect">
-          <option value="">FX Market Intelligence APIを選択</option>
-          <option value="opportunity-ranking" data-path="/v1/market/opportunity-ranking">市場機会ランキング</option>
-          <option value="flow-ranking" data-path="/v1/market/flow-ranking">通貨フローランキング</option>
-          <option value="market-anomaly" data-path="/v1/market/anomaly">市場異常検出</option>
-          <option value="margin-risk" data-path="/v1/market/margin-risk">証拠金・ストップアウトリスク</option>
-          <option value="pair-signal" data-path="/v1/signal/pair/{pair}">個別通貨ペアシグナル</option>
-        </select>
-        <select class="vendor-select" id="vendorSelect">
-          <option value="">OSS Intelligence APIを選択</option>
-          <optgroup label="TradingAgents">
-            <option value="tradingagents" data-path="/v1/vendor/tradingagents/run">全エージェントグラフ</option>
-          </optgroup>
-          <optgroup label="FinGPT">
-            <option value="fingpt-sentiment" data-path="/v1/vendor/fingpt/sentiment">金融センチメント</option>
-            <option value="fingpt-headline" data-path="/v1/vendor/fingpt/headline">見出し方向判定</option>
-            <option value="fingpt-relations" data-path="/v1/vendor/fingpt/relations">金融関係抽出</option>
-            <option value="fingpt-entities" data-path="/v1/vendor/fingpt/entities">金融エンティティ抽出</option>
-            <option value="fingpt-qa" data-path="/v1/vendor/fingpt/qa">金融Q&amp;A</option>
-            <option value="fingpt-forecast" data-path="/v1/vendor/fingpt/forecast">市場予測</option>
-            <option value="fingpt-report" data-path="/v1/vendor/fingpt/report">レポート分析</option>
-          </optgroup>
-          <optgroup label="AI Hedge Fund">
-            <option value="aihf-news" data-path="/v1/vendor/ai-hedge-fund/news-sentiment">ニュース感情</option>
-            <option value="aihf-portfolio" data-path="/v1/vendor/ai-hedge-fund/portfolio">ポートフォリオ統合</option>
-            <option value="aihf-damodaran" data-path="/v1/vendor/ai-hedge-fund/persona/aswath-damodaran">Damodaran</option>
-            <option value="aihf-graham" data-path="/v1/vendor/ai-hedge-fund/persona/ben-graham">Ben Graham</option>
-            <option value="aihf-ackman" data-path="/v1/vendor/ai-hedge-fund/persona/bill-ackman">Bill Ackman</option>
-            <option value="aihf-wood" data-path="/v1/vendor/ai-hedge-fund/persona/cathie-wood">Cathie Wood</option>
-            <option value="aihf-munger" data-path="/v1/vendor/ai-hedge-fund/persona/charlie-munger">Charlie Munger</option>
-            <option value="aihf-burry" data-path="/v1/vendor/ai-hedge-fund/persona/michael-burry">Michael Burry</option>
-            <option value="aihf-pabrai" data-path="/v1/vendor/ai-hedge-fund/persona/mohnish-pabrai">Mohnish Pabrai</option>
-            <option value="aihf-taleb" data-path="/v1/vendor/ai-hedge-fund/persona/nassim-taleb">Nassim Taleb</option>
-            <option value="aihf-lynch" data-path="/v1/vendor/ai-hedge-fund/persona/peter-lynch">Peter Lynch</option>
-            <option value="aihf-fisher" data-path="/v1/vendor/ai-hedge-fund/persona/phil-fisher">Phil Fisher</option>
-            <option value="aihf-jhunjhunwala" data-path="/v1/vendor/ai-hedge-fund/persona/rakesh-jhunjhunwala">Rakesh Jhunjhunwala</option>
-            <option value="aihf-druckenmiller" data-path="/v1/vendor/ai-hedge-fund/persona/stanley-druckenmiller">Stanley Druckenmiller</option>
-            <option value="aihf-buffett" data-path="/v1/vendor/ai-hedge-fund/persona/warren-buffett">Warren Buffett</option>
-          </optgroup>
-        </select>
-        <div class="toolbar"><button class="tool" id="eurPreset">EUR/USD例</button><button class="tool" id="jpyPreset">USD/JPY例</button><button class="tool" id="formatBtn">JSON整形</button></div>
+        <div class="function-pane active" data-pane="basic">
+          <button class="function-card active" data-key="technical" data-path="/v1/analyze/technical" data-preset="eur" data-title="テクニカル分析" data-description="価格・RSI・移動平均から相場の方向を分析します。"><strong>テクニカル分析</strong><small>値動きと指標から方向を確認</small></button>
+          <button class="function-card" data-key="macro" data-path="/v1/analyze/macro" data-preset="eur" data-title="マクロ分析" data-description="金利差・中央銀行・経済イベントから通貨の方向を分析します。"><strong>マクロ分析</strong><small>金利と経済イベントを評価</small></button>
+          <button class="function-card" data-key="sentiment" data-path="/v1/analyze/sentiment" data-preset="eur" data-title="センチメント分析" data-description="ニュースと市場情報から通貨への市場心理を整理します。"><strong>センチメント分析</strong><small>ニュースから市場心理を確認</small></button>
+          <button class="function-card" data-key="full" data-path="/v1/analyze/full" data-preset="eur" data-title="総合分析" data-description="テクニカル・マクロ・ニュースをまとめて総合評価します。"><strong>総合分析</strong><small>複数の材料をまとめて評価</small></button>
+        </div>
+        <div class="function-pane" data-pane="decision">
+          <button class="function-card" data-key="debate" data-path="/v1/debate/bull-bear" data-preset="eur" data-title="強気・弱気討論" data-description="上昇派と下落派の根拠を比較します。"><strong>強気・弱気討論</strong><small>上昇・下落の両方の根拠</small></button>
+          <button class="function-card" data-key="trade" data-path="/v1/decide/trade" data-preset="eur" data-title="売買判断" data-description="入力した市場情報から売買・待機の判断を返します。"><strong>売買判断</strong><small>買う・売る・待つを判断</small></button>
+          <button class="function-card" data-key="risk" data-path="/v1/assess/risk" data-preset="eur" data-title="リスク評価" data-description="値動きやポジションの危険要因を評価します。"><strong>リスク評価</strong><small>損失につながる要因を確認</small></button>
+          <button class="function-card" data-key="portfolio" data-path="/v1/decide/portfolio" data-preset="eur" data-title="保有管理" data-description="現在の保有内容を継続・縮小・整理する判断を返します。"><strong>保有管理</strong><small>保有ポジションを見直す</small></button>
+          <button class="function-card" data-key="review" data-path="/v1/review/trade" data-preset="eur" data-title="取引レビュー" data-description="過去の取引結果を振り返り、改善点を抽出します。"><strong>取引レビュー</strong><small>取引結果から改善点を抽出</small></button>
+        </div>
+        <div class="function-pane" data-pane="market">
+          <button class="function-card" data-key="opportunity-ranking" data-path="/v1/market/opportunity-ranking" data-preset="market" data-title="市場機会ランキング" data-description="複数通貨ペアを比較し、有望な機会を順位付けします。"><strong>市場機会ランキング</strong><small>有望な通貨ペアを順位付け</small></button>
+          <button class="function-card" data-key="flow-ranking" data-path="/v1/market/flow-ranking" data-preset="market" data-title="通貨フローランキング" data-description="資金が向かっている通貨ペアを比較します。"><strong>通貨フローランキング</strong><small>資金の流れを比較</small></button>
+          <button class="function-card" data-key="market-anomaly" data-path="/v1/market/anomaly" data-preset="market" data-title="市場異常検出" data-description="急変や通常と異なる市場状態を検出します。"><strong>市場異常検出</strong><small>急変と異常な動きを検出</small></button>
+          <button class="function-card" data-key="margin-risk" data-path="/v1/market/margin-risk" data-preset="market" data-title="証拠金リスク" data-description="証拠金維持率とストップアウトの危険度を評価します。"><strong>証拠金リスク</strong><small>ロスカットの危険度を確認</small></button>
+          <button class="function-card" data-key="pair-signal" data-path="/v1/signal/pair/{pair}" data-preset="eur" data-title="個別通貨ペアシグナル" data-description="指定した1通貨ペアの現在のシグナルを分析します。"><strong>個別通貨ペアシグナル</strong><small>1通貨ペアを詳しく判断</small></button>
+        </div>
+        <div class="function-pane" data-pane="oss">
+          <button class="function-card" data-key="tradingagents" data-path="/v1/vendor/tradingagents/run" data-preset="tradingagents" data-title="TradingAgents 全体分析" data-description="複数エージェントの調査・討論・リスク判断を一括実行します。"><strong>TradingAgents</strong><small>複数エージェントを一括実行</small></button>
+          <button class="function-card" data-key="fingpt-sentiment" data-path="/v1/vendor/fingpt/sentiment" data-preset="eur" data-title="FinGPT 金融センチメント" data-description="金融テキストの感情と方向性を分析します。"><strong>FinGPT センチメント</strong><small>金融テキストの感情分析</small></button>
+          <button class="function-card" data-key="fingpt-headline" data-path="/v1/vendor/fingpt/headline" data-preset="eur" data-title="FinGPT 見出し判断" data-description="ニュース見出しが相場に与える方向を判定します。"><strong>FinGPT 見出し判断</strong><small>ニュース見出しの方向判定</small></button>
+          <button class="function-card" data-key="fingpt-relations" data-path="/v1/vendor/fingpt/relations" data-preset="eur" data-title="FinGPT 関係抽出" data-description="金融テキストから企業・通貨・要因の関係を抽出します。"><strong>FinGPT 関係抽出</strong><small>対象同士の関係を抽出</small></button>
+          <button class="function-card" data-key="fingpt-entities" data-path="/v1/vendor/fingpt/entities" data-preset="eur" data-title="FinGPT 対象抽出" data-description="金融テキストから通貨・企業・指標などを抽出します。"><strong>FinGPT 対象抽出</strong><small>通貨・企業・指標を抽出</small></button>
+          <button class="function-card" data-key="fingpt-qa" data-path="/v1/vendor/fingpt/qa" data-preset="eur" data-title="FinGPT 金融Q&A" data-description="入力データに基づいて金融の質問へ回答します。"><strong>FinGPT 金融Q&amp;A</strong><small>金融情報について質問</small></button>
+          <button class="function-card" data-key="fingpt-forecast" data-path="/v1/vendor/fingpt/forecast" data-preset="eur" data-title="FinGPT 市場予測" data-description="金融データとニュースから今後の方向を予測します。"><strong>FinGPT 市場予測</strong><small>今後の相場方向を予測</small></button>
+          <button class="function-card" data-key="fingpt-report" data-path="/v1/vendor/fingpt/report" data-preset="eur" data-title="FinGPT レポート分析" data-description="金融レポートを要約し重要な判断材料を抽出します。"><strong>FinGPT レポート分析</strong><small>レポートの重要点を抽出</small></button>
+          <button class="function-card" data-key="aihf-news" data-path="/v1/vendor/ai-hedge-fund/news-sentiment" data-preset="eur" data-title="AI Hedge Fund ニュース分析" data-description="AI Hedge Fund由来の方法でニュース感情を評価します。"><strong>AIHF ニュース分析</strong><small>ニュースの市場影響を評価</small></button>
+          <button class="function-card" data-key="aihf-portfolio" data-path="/v1/vendor/ai-hedge-fund/portfolio" data-preset="eur" data-title="AI Hedge Fund 保有統合" data-description="複数の分析結果をまとめて保有判断を返します。"><strong>AIHF 保有統合</strong><small>複数判断をポートフォリオへ統合</small></button>
+          <button class="function-card" data-key="aihf-damodaran" data-path="/v1/vendor/ai-hedge-fund/persona/aswath-damodaran" data-preset="eur" data-title="Damodaran視点" data-description="価値評価を重視するDamodaran型の視点で分析します。"><strong>Damodaran視点</strong><small>価値評価を重視</small></button>
+          <button class="function-card" data-key="aihf-graham" data-path="/v1/vendor/ai-hedge-fund/persona/ben-graham" data-preset="eur" data-title="Ben Graham視点" data-description="安全余裕を重視するBen Graham型の視点で分析します。"><strong>Ben Graham視点</strong><small>安全余裕を重視</small></button>
+          <button class="function-card" data-key="aihf-ackman" data-path="/v1/vendor/ai-hedge-fund/persona/bill-ackman" data-preset="eur" data-title="Bill Ackman視点" data-description="集中投資と事業品質を重視する視点で分析します。"><strong>Bill Ackman視点</strong><small>集中投資と品質を重視</small></button>
+          <button class="function-card" data-key="aihf-wood" data-path="/v1/vendor/ai-hedge-fund/persona/cathie-wood" data-preset="eur" data-title="Cathie Wood視点" data-description="成長テーマと変革性を重視する視点で分析します。"><strong>Cathie Wood視点</strong><small>成長テーマを重視</small></button>
+          <button class="function-card" data-key="aihf-munger" data-path="/v1/vendor/ai-hedge-fund/persona/charlie-munger" data-preset="eur" data-title="Charlie Munger視点" data-description="合理性と品質を重視する視点で分析します。"><strong>Charlie Munger視点</strong><small>合理性と品質を重視</small></button>
+          <button class="function-card" data-key="aihf-burry" data-path="/v1/vendor/ai-hedge-fund/persona/michael-burry" data-preset="eur" data-title="Michael Burry視点" data-description="逆張りと隠れたリスクを重視する視点で分析します。"><strong>Michael Burry視点</strong><small>逆張りと隠れたリスク</small></button>
+          <button class="function-card" data-key="aihf-pabrai" data-path="/v1/vendor/ai-hedge-fund/persona/mohnish-pabrai" data-preset="eur" data-title="Mohnish Pabrai視点" data-description="損失を抑えた非対称な機会を重視します。"><strong>Mohnish Pabrai視点</strong><small>非対称な機会を重視</small></button>
+          <button class="function-card" data-key="aihf-taleb" data-path="/v1/vendor/ai-hedge-fund/persona/nassim-taleb" data-preset="eur" data-title="Nassim Taleb視点" data-description="テールリスクと頑健性を重視する視点で分析します。"><strong>Nassim Taleb視点</strong><small>テールリスクを重視</small></button>
+          <button class="function-card" data-key="aihf-lynch" data-path="/v1/vendor/ai-hedge-fund/persona/peter-lynch" data-preset="eur" data-title="Peter Lynch視点" data-description="理解可能性と成長余地を重視する視点で分析します。"><strong>Peter Lynch視点</strong><small>理解可能性と成長を重視</small></button>
+          <button class="function-card" data-key="aihf-fisher" data-path="/v1/vendor/ai-hedge-fund/persona/phil-fisher" data-preset="eur" data-title="Phil Fisher視点" data-description="定性的な品質と長期成長を重視します。"><strong>Phil Fisher視点</strong><small>品質と長期成長を重視</small></button>
+          <button class="function-card" data-key="aihf-jhunjhunwala" data-path="/v1/vendor/ai-hedge-fund/persona/rakesh-jhunjhunwala" data-preset="eur" data-title="Rakesh Jhunjhunwala視点" data-description="成長市場と確信度を重視する視点で分析します。"><strong>Jhunjhunwala視点</strong><small>成長市場と確信度を重視</small></button>
+          <button class="function-card" data-key="aihf-druckenmiller" data-path="/v1/vendor/ai-hedge-fund/persona/stanley-druckenmiller" data-preset="eur" data-title="Druckenmiller視点" data-description="マクロ環境と流動性を重視する視点で分析します。"><strong>Druckenmiller視点</strong><small>マクロと流動性を重視</small></button>
+          <button class="function-card" data-key="aihf-buffett" data-path="/v1/vendor/ai-hedge-fund/persona/warren-buffett" data-preset="eur" data-title="Warren Buffett視点" data-description="長期価値と事業の強さを重視する視点で分析します。"><strong>Warren Buffett視点</strong><small>長期価値と強さを重視</small></button>
+        </div>
+        <div class="selected-function"><span>選択中</span><strong id="selectedTitle">テクニカル分析</strong><p id="selectedDescription">価格・RSI・移動平均から相場の方向を分析します。</p></div>
+        <div class="input-head"><strong>入力データ</strong><div class="toolbar"><button class="tool" id="eurPreset">EUR/USD例</button><button class="tool" id="jpyPreset">USD/JPY例</button><button class="tool" id="formatBtn">JSON整形</button></div></div>
         <textarea class="editor" id="payload" spellcheck="false"></textarea>
-        <button class="run" id="runBtn">Gemma 4で実行</button>
+        <button class="run" id="runBtn">テクニカル分析を実行</button>
       </div>
     </section>
     <section class="panel">
       <div class="panel-head"><strong>Response</strong><div class="metrics"><span id="statusMetric">READY</span><span id="latencyMetric">- ms</span><span id="modelMetric">gemma4:12b</span></div></div>
-      <pre class="result empty" id="result">APIを選び、左のJSONを確認して実行してください。</pre>
+      <pre class="result empty" id="result">「テクニカル分析を実行」を押すと、ここに結果が表示されます。</pre>
     </section>
   </div>
   <div class="notice" style="margin-top:14px">出力は分析材料です。実注文、注文数量、損失上限はFX Brainではなく、呼び出し側の固定リスク制御が決定します。</div>
@@ -271,13 +274,14 @@ tradingagents:{pair:"EUR_USD",trade_date:new Date().toISOString().slice(0,10),de
 let endpoint="technical";
 const editor=document.querySelector('#payload'),result=document.querySelector('#result'),run=document.querySelector('#runBtn');
 function setPreset(value){editor.value=JSON.stringify(value,null,2)}setPreset(presets.eur);
-document.querySelectorAll('.api-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelector('#vendorSelect').value='';document.querySelector('#marketSelect').value='';endpoint=btn.dataset.key;document.querySelector('#endpointPath').textContent=btn.dataset.path}));
-document.querySelector('#vendorSelect').addEventListener('change',e=>{if(!e.target.value)return;document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));document.querySelector('#marketSelect').value='';endpoint=e.target.value;const option=e.target.options[e.target.selectedIndex];document.querySelector('#endpointPath').textContent=option.dataset.path;if(endpoint==='tradingagents')setPreset(presets.tradingagents);else if(!editor.value.trim()||!editor.value.includes('"market"'))setPreset(presets.eur)});
-document.querySelector('#marketSelect').addEventListener('change',e=>{if(!e.target.value)return;document.querySelectorAll('.api-btn').forEach(x=>x.classList.remove('active'));document.querySelector('#vendorSelect').value='';endpoint=e.target.value;const option=e.target.options[e.target.selectedIndex];document.querySelector('#endpointPath').textContent=option.dataset.path;setPreset(endpoint==='pair-signal'?presets.eur:presets.market)});
+let selectedTitle="テクニカル分析";
+function selectFunction(card){document.querySelectorAll('.function-card').forEach(x=>x.classList.remove('active'));card.classList.add('active');endpoint=card.dataset.key;selectedTitle=card.dataset.title;document.querySelector('#endpointPath').textContent=card.dataset.path;document.querySelector('#selectedTitle').textContent=selectedTitle;document.querySelector('#selectedDescription').textContent=card.dataset.description;run.textContent=`${selectedTitle}を実行`;setPreset(presets[card.dataset.preset]||presets.eur);result.className='result empty';result.textContent=`「${selectedTitle}を実行」を押すと、ここに結果が表示されます。`}
+document.querySelectorAll('.function-card').forEach(card=>card.addEventListener('click',()=>selectFunction(card)));
+document.querySelectorAll('.function-tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.function-tab').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-selected','false')});document.querySelectorAll('.function-pane').forEach(x=>x.classList.remove('active'));tab.classList.add('active');tab.setAttribute('aria-selected','true');const pane=document.querySelector(`[data-pane="${tab.dataset.tab}"]`);pane.classList.add('active');selectFunction(pane.querySelector('.function-card'))}));
 document.querySelector('#eurPreset').onclick=()=>setPreset(presets.eur);document.querySelector('#jpyPreset').onclick=()=>setPreset(presets.jpy);
 document.querySelector('#formatBtn').onclick=()=>{try{setPreset(JSON.parse(editor.value))}catch(e){showError('JSON: '+e.message)}};
 function showError(message){result.className='result error';result.textContent=message;document.querySelector('#statusMetric').textContent='ERROR'}
-run.onclick=async()=>{let payload;try{payload=JSON.parse(editor.value)}catch(e){showError('JSON: '+e.message);return}run.disabled=true;run.textContent='Gemma 4 実行中...';result.className='result empty';result.textContent='Ollamaからの応答を待っています。';const start=performance.now();try{const response=await fetch(`kfxbrain.php?proxy=run&endpoint=${encodeURIComponent(endpoint)}`,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:JSON.stringify(payload)});const data=await response.json();document.querySelector('#statusMetric').textContent=String(response.status);document.querySelector('#latencyMetric').textContent=`${data.latency_ms??Math.round(performance.now()-start)} ms`;document.querySelector('#modelMetric').textContent=data.model||'Gemma';result.className=response.ok?'result':'result error';result.textContent=JSON.stringify(data,null,2)}catch(e){showError(e.message)}finally{run.disabled=false;run.textContent='Gemma 4で実行'}};
+run.onclick=async()=>{let payload;try{payload=JSON.parse(editor.value)}catch(e){showError('JSON: '+e.message);return}run.disabled=true;run.textContent=`${selectedTitle}を実行中...`;result.className='result empty';result.textContent='Ollamaからの応答を待っています。';const start=performance.now();try{const response=await fetch(`kfxbrain.php?proxy=run&endpoint=${encodeURIComponent(endpoint)}`,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:JSON.stringify(payload)});const data=await response.json();document.querySelector('#statusMetric').textContent=String(response.status);document.querySelector('#latencyMetric').textContent=`${data.latency_ms??Math.round(performance.now()-start)} ms`;document.querySelector('#modelMetric').textContent=data.model||'Gemma';result.className=response.ok?'result':'result error';result.textContent=JSON.stringify(data,null,2)}catch(e){showError(e.message)}finally{run.disabled=false;run.textContent=`${selectedTitle}を実行`}};
 fetch('kfxbrain.php?proxy=health',{cache:'no-store'}).then(r=>r.json()).then(d=>{const ok=Boolean(d.ok);document.querySelector('#healthDot').className='dot '+(ok?'ok':'bad');document.querySelector('#healthText').textContent=ok?`${d.model} READY`:'API OFFLINE'}).catch(()=>{document.querySelector('#healthDot').className='dot bad';document.querySelector('#healthText').textContent='API OFFLINE'});
 </script>
 <?php endif; ?>
