@@ -71,7 +71,6 @@ $endpoint_map = array(
     'market-anomaly' => '/v1/market/anomaly',
     'margin-risk' => '/v1/market/margin-risk',
     'pair-signal' => '/v1/signal/pair/{pair}',
-    'tradingagents' => '/v1/vendor/tradingagents/run',
     'fingpt-sentiment' => '/v1/vendor/fingpt/sentiment',
     'fingpt-headline' => '/v1/vendor/fingpt/headline',
     'fingpt-relations' => '/v1/vendor/fingpt/relations',
@@ -144,10 +143,7 @@ if (isset($_GET['proxy'])) {
             }
             $api_path = str_replace('{pair}', rawurlencode($pair), $api_path);
         }
-        $timeout = $endpoint === 'tradingagents' ? 1200 : 300;
-        if ($endpoint === 'tradingagents') {
-            @set_time_limit(0);
-        }
+        $timeout = 300;
         $response = kfxb_api('POST', $api_path, $payload, $timeout);
     } else {
         $response = array('status' => 404, 'data' => array('ok' => false, 'detail' => 'unknown proxy'));
@@ -227,7 +223,6 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
           <button class="function-card" data-key="pair-signal" data-path="/v1/signal/pair/{pair}" data-preset="eur" data-title="個別通貨ペアシグナル" data-description="指定した1通貨ペアの現在のシグナルを分析します。"><strong>個別通貨ペアシグナル</strong><small>1通貨ペアを詳しく判断</small></button>
         </div>
         <div class="function-pane" data-pane="oss">
-          <button class="function-card" data-key="tradingagents" data-path="/v1/vendor/tradingagents/run" data-preset="tradingagents" data-title="TradingAgents 全体分析" data-description="複数エージェントの調査・討論・リスク判断を一括実行します。"><strong>TradingAgents</strong><small>複数エージェントを一括実行</small></button>
           <button class="function-card" data-key="fingpt-sentiment" data-path="/v1/vendor/fingpt/sentiment" data-preset="eur" data-title="FinGPT 金融センチメント" data-description="金融テキストの感情と方向性を分析します。"><strong>FinGPT センチメント</strong><small>金融テキストの感情分析</small></button>
           <button class="function-card" data-key="fingpt-headline" data-path="/v1/vendor/fingpt/headline" data-preset="eur" data-title="FinGPT 見出し判断" data-description="ニュース見出しが相場に与える方向を判定します。"><strong>FinGPT 見出し判断</strong><small>ニュース見出しの方向判定</small></button>
           <button class="function-card" data-key="fingpt-relations" data-path="/v1/vendor/fingpt/relations" data-preset="eur" data-title="FinGPT 関係抽出" data-description="金融テキストから企業・通貨・要因の関係を抽出します。"><strong>FinGPT 関係抽出</strong><small>対象同士の関係を抽出</small></button>
@@ -273,7 +268,6 @@ const presets={
 eur:{pair:"EUR_USD",timeframe:"H1",as_of:new Date().toISOString(),market:{price:1.0862,spread_pips:0.8,atr_pips:14.2,session:"London"},technicals:{return_1h_pct:0.18,return_24h_pct:0.42,rsi_14:57.2,ema_20:1.0841,ema_50:1.0818,macd_histogram:0.00031,support:1.0825,resistance:1.0890},macro:{ecb_policy:"restrictive but easing bias",fed_policy:"data dependent",rate_differential_pct:1.4,next_events:["US CPI in 18 hours"]},news:[{title:"ECB officials signal decisions remain data dependent",sentiment:"neutral"}],position:{side:"flat",account_risk_remaining_pct:0.7},history:[],prior_reports:{},question:"次の4時間で新規エントリーを検討できるか"},
 jpy:{pair:"USD_JPY",timeframe:"H1",as_of:new Date().toISOString(),market:{price:156.42,spread_pips:1.0,atr_pips:22.6,session:"Tokyo"},technicals:{return_1h_pct:-0.12,return_24h_pct:0.68,rsi_14:66.5,ema_20:155.94,ema_50:154.88,macd_histogram:0.061,support:155.70,resistance:157.10},macro:{boj_policy:"normalization risk",fed_policy:"data dependent",intervention_risk:"elevated",next_events:["BOJ governor speech in 6 hours"]},news:[{title:"Officials reiterate readiness to respond to excessive FX moves",sentiment:"negative for USD_JPY"}],position:{side:"long",unrealized_pips:18,account_risk_remaining_pct:0.3},history:[],prior_reports:{},question:"保有継続か縮小かを評価"},
 market:{timeframe:"H1",as_of:new Date().toISOString(),global_context:{dxy_return_24h_pct:0.35,risk_sentiment:"mixed",next_events:["US CPI in 18 hours"]},account_context:{leverage:25,equity:100000,used_margin:12000,free_margin:88000,margin_level_pct:833,stop_out_level_pct:100},pairs:[{pair:"EUR_USD",market:{price:1.0862,spread_pips:0.8,atr_pips:14.2,return_24h_pct:0.42},technicals:{rsi_14:57.2},macro:{rate_differential_pct:1.4},flows:{futures_net_change_pct:2.1,real_money_flow:"moderate EUR buying"},positioning:{cot_percentile:62}},{pair:"USD_JPY",market:{price:156.42,spread_pips:1.0,atr_pips:22.6,return_24h_pct:0.68},technicals:{rsi_14:66.5},macro:{intervention_risk:"elevated",rate_differential_pct:4.1},flows:{carry_flow:"strong"},positioning:{speculative_net_percentile:87}},{pair:"GBP_USD",market:{price:1.294,spread_pips:1.1,atr_pips:18.4,return_24h_pct:-0.25},technicals:{rsi_14:43.8},macro:{rate_differential_pct:1.1},flows:{futures_net_change_pct:-3.4},positioning:{cot_percentile:38}}],question:"機会、フロー、異常、証拠金リスクを比較"},
-tradingagents:{pair:"EUR_USD",trade_date:new Date().toISOString().slice(0,10),debate_rounds:1,risk_rounds:1,output_language:"Japanese"}
 };
 let endpoint="technical";
 const editor=document.querySelector('#payload'),result=document.querySelector('#result'),resultView=document.querySelector('#resultView'),rawResult=document.querySelector('#rawResult'),run=document.querySelector('#runBtn');

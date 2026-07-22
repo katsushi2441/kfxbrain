@@ -10,7 +10,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from . import __version__
 from .config import settings
-from .ollama import BrainError, FxBrain
+from .ollama import REQUEST_PROVIDER, BrainError, FxBrain, resolve_model
 from .schemas import (
     BrainResponse,
     FxBrainRequest,
@@ -30,11 +30,34 @@ from .vendor_adapters import (
 )
 
 
+class ProviderMiddleware:
+    """リクエスト単位のLLMプロバイダをヘッダ X-KFXBrain-Provider から contextvar に載せる。
+    課金レール(x402/JPYCゲートウェイ)だけが 'deepseek' を注入する。無指定・不正値はサービス
+    既定(config.llm_provider=ローカルGemma)のまま。WEBコンソール/kfxai等の直叩きはヘッダを
+    付けないのでGemmaを使う。純粋ASGIミドルウェアなのでset値はrun_in_threadpoolの同期
+    エンドポイントまで確実に伝播する(BaseHTTPMiddleware/yield依存のcontextvar問題を回避)。"""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope.get("type") == "http":
+            prov = ""
+            for key, value in scope.get("headers", []):
+                if key == b"x-kfxbrain-provider":
+                    prov = value.decode("latin-1").strip().lower()
+                    break
+            REQUEST_PROVIDER.set(prov if prov in ("ollama", "deepseek") else "")
+        await self.app(scope, receive, send)
+
+
 app = FastAPI(
     title="Kurage FX Brain API",
     version=__version__,
-    description="Structured Gemma 4 judgment APIs for FX systems. No broker execution.",
+    description="Structured judgment APIs for FX systems (local Gemma 4 by default; "
+                "paid x402 rails use DeepSeek). No broker execution.",
 )
+app.add_middleware(ProviderMiddleware)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 brain = FxBrain(settings)
 tradingagents = TradingAgentsAdapter(brain, settings)
@@ -140,7 +163,7 @@ def run(task: str, endpoint: str, payload: FxBrainRequest | FxMarketIntelligence
     return BrainResponse(
         endpoint=endpoint,
         request_id=uuid.uuid4().hex[:16],
-        model=settings.active_model,
+        model=resolve_model(settings),
         latency_ms=round((time.monotonic() - started) * 1000),
         result=result,
     )
@@ -155,7 +178,7 @@ def run_vendor(endpoint: str, operation: Callable[[], dict]) -> BrainResponse:
     return BrainResponse(
         endpoint=endpoint,
         request_id=uuid.uuid4().hex[:16],
-        model=settings.active_model,
+        model=resolve_model(settings),
         latency_ms=round((time.monotonic() - started) * 1000),
         result=result,
     )

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextvars
 import json
 import re
 import threading
@@ -14,6 +15,21 @@ from .schemas import FxBrainRequest, FxMarketIntelligenceRequest
 
 class BrainError(RuntimeError):
     pass
+
+
+# リクエスト単位のLLMプロバイダ上書き。既定は空("")=サービス設定(config.llm_provider)を使う。
+# 課金レール(x402/JPYCゲートウェイ)だけが "deepseek" を注入し、WEBコンソール・kfxai等の
+# 直叩きはローカルGemmaのまま(2026-07-22: 「x402以外はDeepSeekを使わない」方針)。
+REQUEST_PROVIDER: contextvars.ContextVar[str] = contextvars.ContextVar(
+    "kfxbrain_request_provider", default="")
+
+
+def resolve_provider(config: Settings = settings) -> str:
+    return REQUEST_PROVIDER.get() or config.llm_provider
+
+
+def resolve_model(config: Settings = settings) -> str:
+    return config.deepseek_model if resolve_provider(config) == "deepseek" else config.ollama_model
 
 
 REQUIRED_RESULT_KEYS = {
@@ -164,10 +180,11 @@ class FxBrain:
     def generate_json(self, prompt: str, max_tokens: int = 2200) -> dict[str, Any]:
         if len(prompt) > self.config.max_input_chars:
             raise BrainError(f"input exceeds {self.config.max_input_chars} characters")
-        if self.config.llm_provider == "deepseek":
+        provider = resolve_provider(self.config)
+        if provider == "deepseek":
             return self._generate_json_deepseek(prompt, max_tokens)
-        if self.config.llm_provider != "ollama":
-            raise BrainError("KFXBRAIN_LLM_PROVIDER must be ollama or deepseek")
+        if provider != "ollama":
+            raise BrainError("LLM provider must be ollama or deepseek")
         payload = {
             "model": self.config.ollama_model,
             "prompt": prompt,
