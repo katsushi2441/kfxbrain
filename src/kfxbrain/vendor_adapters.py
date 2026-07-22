@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import json
+import os
 import sys
 import threading
 import types
@@ -117,12 +118,28 @@ class TradingAgentsAdapter:
             # 対策: deep/quickともe4bに、max_tokensで長文暴走を抑制(隠れ推論分の余裕を持たせ900)、
             # 分析役を市場のみ(fast_analysts)に絞り、討論/リスクは各1ラウンド。
             # 深い判断が要る場合は debate_rounds/risk_rounds を上げて呼び出し側で許容する。
-            config.update(
-                {
+            if self.settings.llm_provider == "deepseek":
+                # DeepSeek(ホスト型・OpenAI互換)。TradingAgentsはネイティブでdeepseekプロバイダを
+                # 持ち(base_url=api.deepseek.com既定)、キーはDEEPSEEK_API_KEY環境変数から読む。
+                # ローカルGemma(GPU競合で5.5分)を廃し、ホスト型で高速・安定化(PayApi/Chet対応)。
+                if self.settings.deepseek_api_key and not os.environ.get("DEEPSEEK_API_KEY"):
+                    os.environ["DEEPSEEK_API_KEY"] = self.settings.deepseek_api_key
+                graph_llm = {
+                    "llm_provider": "deepseek",
+                    "deep_think_llm": self.settings.deepseek_model,
+                    "quick_think_llm": self.settings.deepseek_model,
+                    "backend_url": self.settings.deepseek_base_url,
+                }
+            else:
+                graph_llm = {
                     "llm_provider": "ollama",
                     "deep_think_llm": self.settings.fast_ollama_model,
                     "quick_think_llm": self.settings.fast_ollama_model,
                     "backend_url": f"{self.settings.ollama_url}/v1",
+                }
+            config.update(
+                {
+                    **graph_llm,
                     "output_language": request.output_language,
                     "max_debate_rounds": request.debate_rounds,
                     "max_risk_discuss_rounds": request.risk_rounds,

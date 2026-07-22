@@ -73,7 +73,7 @@ def health() -> dict:
         "ok": bool(status.get("reachable") and status.get("model_available")),
         "service": "kfxbrain",
         "version": __version__,
-        "model": settings.ollama_model,
+        "model": settings.active_model,
         "ollama": status,
         "vendors": vendor_status(),
     }
@@ -83,7 +83,7 @@ def health() -> dict:
 def meta() -> dict:
     return {
         "service": "Kurage FX Brain",
-        "model": settings.ollama_model,
+        "model": settings.active_model,
         "execution": False,
         "fallback": False,
         "endpoints": [
@@ -140,7 +140,7 @@ def run(task: str, endpoint: str, payload: FxBrainRequest | FxMarketIntelligence
     return BrainResponse(
         endpoint=endpoint,
         request_id=uuid.uuid4().hex[:16],
-        model=settings.ollama_model,
+        model=settings.active_model,
         latency_ms=round((time.monotonic() - started) * 1000),
         result=result,
     )
@@ -155,7 +155,7 @@ def run_vendor(endpoint: str, operation: Callable[[], dict]) -> BrainResponse:
     return BrainResponse(
         endpoint=endpoint,
         request_id=uuid.uuid4().hex[:16],
-        model=settings.ollama_model,
+        model=settings.active_model,
         latency_ms=round((time.monotonic() - started) * 1000),
         result=result,
     )
