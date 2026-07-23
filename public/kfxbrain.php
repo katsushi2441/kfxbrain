@@ -180,6 +180,23 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
 @media(max-width:900px){.result-wrap{height:auto;min-height:390px}}
 @media(max-width:520px){.result-view{grid-template-columns:1fr}.result-card.wide{grid-column:auto}.quick-input{align-items:flex-start;flex-direction:column}}
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BP0650KDFR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BP0650KDFR');
+</script>
+<script>
+(function () {
+    var s = document.createElement('script');
+    s.src = 'https://aiknowledgecms.exbridge.jp/simpletrack.php'
+        + '?url=' + encodeURIComponent(location.href)
+        + '&ref=' + encodeURIComponent(document.referrer);
+    document.head.appendChild(s);
+})();
+</script>
 </head>
 <body>
 <header>
