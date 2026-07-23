@@ -244,7 +244,7 @@ footer a { color: var(--accent); font-weight: 700; }
 
 <section>
   <h2>利用経路とマーケットプレイス公開状況</h2>
-  <p class="sub">公開中のx402 API 36パス、2つの決済ネットワーク、無料Workbench、OSS自前運用を選べます。</p>
+  <p class="sub">同じ頭脳を、すべてのx402エージェント・マーケットプレイス（Coinbase CDP・Bankr・PayAPI・Agent402・JPYC・Virtuals ACP）に加え、RapidAPIのカード決済・無料Workbench・OSS自前運用で公開しています。</p>
   <div class="grid">
     <div class="card">
       <span class="tag new">公開中・直接</span>
@@ -255,22 +255,49 @@ footer a { color: var(--accent); font-weight: 700; }
       <p><a href="https://bittensorman.xyz/.well-known/x402.json" style="color:var(--accent);font-weight:700">公開ディスカバリを開く →</a></p>
     </div>
     <div class="card">
-      <span class="tag new">公開中・マーケット</span>
-      <h3>BankrとJPYC決済</h3>
-      <p>Bankrではウォレットを持つAIエージェント向けにコアFX判断スキルを提供。
-      Polygon上のJPYCでは通常スキル7.5 JPYC、TradingAgents完全グラフ75 JPYCです。</p>
+      <span class="tag new">公開中・Bankr</span>
+      <h3>Bankr x402</h3>
+      <p>ウォレットを持つAIエージェント向けに、コアFX判断スキルをx402リスティングで提供。
+      Base上のUSDCで1回$0.05です（TradingAgents完全グラフは直販レールで提供）。</p>
       <p><a href="https://x402.bankr.bot/0x444fadbd6e1fed0cfbf7613b6c9f91b9021eecbd/fxbrain" style="color:var(--accent);font-weight:700">Bankrを開く →</a></p>
     </div>
     <div class="card">
+      <span class="tag new">公開中・PayAPI</span>
+      <h3>PayAPI Market</h3>
+      <p>同一のx402プロバイダー（<code>bittensorman</code>／ウォレット<code>0x444fad…</code>）がPayAPI Marketで
+      公開・verified済み。ここでプロバイダーを見つけたエージェントは、CDPゲートウェイ経由で
+      同じ頭脳に到達します。</p>
+      <p><a href="https://payapi.market/provider/bittensorman" style="color:var(--accent);font-weight:700" target="_blank" rel="noopener">PayAPIプロバイダーを開く →</a></p>
+    </div>
+    <div class="card">
+      <span class="tag new">公開中・Agent402</span>
+      <h3>Agent402</h3>
+      <p>同じプロバイダー・同じBaseウォレットで、Agent402にx402エージェントとして掲載。
+      Agent402上で購入するAIエージェントが、そのままホスト版スキルを決済・呼び出しできます。</p>
+      <p><a href="https://agent402.app/agents/42d997f9-a6ee-4a91-8e51-454d0a66dae0" style="color:var(--accent);font-weight:700" target="_blank" rel="noopener">Agent402エージェントを開く →</a></p>
+    </div>
+    <div class="card">
+      <span class="tag new">公開中・JPYC</span>
+      <h3>JPYCレール</h3>
+      <p>円ステーブルコイン決済のゲートウェイ。通常スキル7.5 JPYC、TradingAgents完全グラフ75 JPYCで、
+      <code>exbridge.ddns.net:18327/fxbrain/…</code>から利用できます。</p>
+    </div>
+    <div class="card">
+      <span class="tag new">公開中・Virtuals ACP</span>
+      <h3>Virtuals Agent Commerce Protocol</h3>
+      <p>Virtuals の ACP に「Kurage AI Project」として掲載。エージェント同士が
+      USDCエスクローでFX判断スキルを購入できます。</p>
+    </div>
+    <div class="card">
       <span class="tag">RapidAPI・公開中</span>
-      <h3>カード決済でも利用可能</h3>
+      <h3>カード決済（x402とは別レール）</h3>
       <p>Kurage FX BrainはRapidAPIで公開中です。暗号資産ウォレットが無くても、APIキーと
-      カード決済の従量課金で同じFX判断スキルを利用できます（x402とは別のレール）。</p>
+      カード決済の従量課金で同じFX判断スキルを利用できます。</p>
       <p>エンドポイント: <code>kurage-fx-brain.p.rapidapi.com</code>（<code>X-RapidAPI-Key</code>ヘッダで認証）。<a href="https://rapidapi.com/katsushi2441/api/kurage-fx-brain" style="color:var(--accent);font-weight:700" target="_blank" rel="noopener">RapidAPIで開く →</a></p>
     </div>
     <div class="card">
       <span class="tag">kfxai・OSS</span>
-      <h3>注文できない頭脳</h3>
+      <h3>自前運用・kfxai本体の裏側で稼働</h3>
       <p>kfxaiは市場・リスク判断にこのAPIを利用できますが、ブローカー認証、注文数量、
       執行はOSSの取引本体に残ります。ブラウザWorkbenchでは本番APIをx402決済なしで試せます。</p>
       <p><a href="https://kfxai.exbridge.jp/kfxai.html" style="color:var(--accent);font-weight:700">kfxai取引本体を見る →</a></p>
